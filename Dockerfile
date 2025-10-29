@@ -9,4 +9,12 @@ RUN yarn install --frozen-lockfile --unsafe-perm
 
 COPY . .
 
-RUN yarn prisma generate
+RUN npx prisma generate
+
+FROM node:20-bullseye AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+CMD ["yarn", "start"]

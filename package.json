@@ -8,18 +8,24 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:migrate": "docker exec -it marketplace-api npx prisma migrate dev",
-    "prisma:generate": "docker exec -it marketplace-api npx prisma generate"
+    "prisma:generate": "docker exec -it marketplace-api npx prisma generate",
+    "rebuild:docker": "docker compose down && docker compose build --no-cache && docker compose up -d"
   },
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "@fastify/swagger": "^9.5.2",
     "@fastify/swagger-ui": "^5.2.3",
     "@prisma/client": "^6.18.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.3",
     "fastify": "^5.6.1",
-    "prisma": "^6.18.0"
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.18.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.9.2",
     "pino-pretty": "^13.1.2",
     "ts-node": "^10.9.2",

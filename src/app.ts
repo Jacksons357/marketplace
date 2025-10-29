@@ -1,6 +1,8 @@
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import Fastify from "fastify";
+import { routes } from "./infra/http/routes/routes";
+import { errorHandler } from "./shared/errors/error-handler";
 
 export const app = Fastify({
   logger: {
@@ -48,3 +50,6 @@ app.register(swaggerUI, {
   staticCSP: true,
   transformSpecificationClone: true,
 });
+
+app.register(routes)
+app.setErrorHandler(errorHandler)

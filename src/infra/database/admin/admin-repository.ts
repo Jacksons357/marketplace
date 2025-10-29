@@ -1,9 +1,9 @@
-import { prisma } from "../../../prisma/client";
-import { User } from "../../domain/entities/User";
-import { IUserRepository } from "../../domain/repositories/IUserRepository";
+import { prisma } from "../../../../prisma/client";
+import { Admin } from "../../../domain/entities/Admin";
+import { IAdminRepository } from "../../../domain/repositories/IAdminRepository";
 
-export class UserRepository implements IUserRepository {
-  async findByEmail(email: string): Promise<User | null> {
+export class AdminRepository implements IAdminRepository {
+  async findByEmail(email: string): Promise<Admin | null> {
     const record = await prisma.user.findUnique({
       where: {
         email,
@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository {
       return null
     }
 
-    return new User(
+    return new Admin(
       record.id,
       record.name,
       record.email,
@@ -24,7 +24,7 @@ export class UserRepository implements IUserRepository {
     )
   }
 
-  async findByPhone(phone: string): Promise<User | null> {
+  async findByPhone(phone: string): Promise<Admin | null> {
     const record = await prisma.user.findUnique({
       where: {
         phone,
@@ -33,7 +33,7 @@ export class UserRepository implements IUserRepository {
     if(!record){
       return null
     }
-    return new User(
+    return new Admin(
       record.id,
       record.name,
       record.email,
@@ -44,7 +44,7 @@ export class UserRepository implements IUserRepository {
     )
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: Admin): Promise<Admin> {
     const record = await prisma.user.create({
       data: {
         id: user.id,
@@ -56,7 +56,7 @@ export class UserRepository implements IUserRepository {
         role: user.role,
       }
     })
-    return new User(
+    return new Admin(
       record.id,
       record.name,
       record.email,
@@ -67,7 +67,7 @@ export class UserRepository implements IUserRepository {
     )
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<Admin | null> {
     const record = await prisma.user.findUnique({
       where: {
         id,
@@ -76,7 +76,7 @@ export class UserRepository implements IUserRepository {
     if(!record){
       return null
     }
-    return new User(
+    return new Admin(
       record.id,
       record.name,
       record.email,

@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { RegisterAdminUseCase } from "../../../../domain/use-cases/admin/register-admin";
 import { RegisterAdminDTO } from "../../../../domain/dtos/RegisterAdminDTO";
 
-export class UserController {
+export class AdminController {
   constructor(private registerAdmin: RegisterAdminUseCase) {}
 
   async register(req: FastifyRequest, res: FastifyReply) {

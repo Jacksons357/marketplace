@@ -1,7 +1,10 @@
+export type UserRole = "ADMIN" | "USER"
 
-export class User {
+export class Admin {
   public id: string;
   public createdAt: Date;
+  public organizationId: string | null;
+  public role: UserRole
 
   constructor(
     id: string,
@@ -9,8 +12,12 @@ export class User {
     public email: string,
     public phone: string | null,
     private passwordHash: string,
+    organizationId: string | null,
+    role: UserRole = "USER"
   ) {
     this.id = id
+    this.organizationId = organizationId
+    this.role = role
     this.createdAt = new Date()
   }
 
@@ -28,6 +35,8 @@ export class User {
       name: this.name,
       email: this.email,
       phone: this.phone,
+      organizationId: this.organizationId,
+      role: this.role,
       createdAt: this.createdAt,
     }
   }

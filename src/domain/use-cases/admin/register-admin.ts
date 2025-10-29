@@ -3,24 +3,24 @@ import { UserAlreadyExistsError } from "../../../shared/errors/user-already-exis
 import { generateAccessToken } from "../../../utils/generate-access-token";
 import { RegisterAdminDTO } from "../../dtos/RegisterAdminDTO";
 import { Organization } from "../../entities/Organization";
-import { User } from "../../entities/User";
+import { User } from "../../entities/Admin";
 import { IOrganizationRepository } from "../../repositories/IOrganizationRepository";
-import { IUserRepository } from "../../repositories/IUserRepository";
+import { IAdminRepository } from "../../repositories/IAdminRepository";
 import * as bcrypt from "bcryptjs"
 
 export class RegisterAdminUseCase {
   constructor(
-    private userRepository: IUserRepository,
+    private adminRepository: IAdminRepository,
     private organizationRepository: IOrganizationRepository
   ) {}
 
   async execute(data: RegisterAdminDTO) {
-    const existingUserByEmail = await this.userRepository.findByEmail(data.email)
+    const existingUserByEmail = await this.adminRepository.findByEmail(data.email)
     if (existingUserByEmail) {
       throw new UserAlreadyExistsError()
     }
 
-    const existingUserByPhone = await this.userRepository.findByPhone(data.phone)
+    const existingUserByPhone = await this.adminRepository.findByPhone(data.phone)
     if (existingUserByPhone) {
       throw new UserAlreadyExistsError()
     }
@@ -47,7 +47,7 @@ export class RegisterAdminUseCase {
       "ADMIN"
     )
     try {
-      await this.userRepository.create(user)
+      await this.adminRepository.create(user)
     } catch (error) {
       throw new AppError("Error creating user", 400)
     }

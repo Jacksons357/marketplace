@@ -1,18 +1,20 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { UserController } from "../../controllers/user-controller";
-import { RegisterUserUseCase } from "../../../../domain/use-cases/register-user";
+import { UserController } from "../../controllers/admin/admin-controller";
+import { RegisterAdminUseCase } from "../../../../domain/use-cases/admin/register-admin";
 import { UserRepository } from "../../../database/user-repository";
-import { registerUserSchema } from "../../../../domain/dtos/RegisterUserDTO";
 import validateBody from "../../../../shared/middlewares/validate-body";
+import { OrganizationRepository } from "../../../database/organization-repository";
+import { registerAdminSchema } from "../../../../domain/dtos/RegisterAdminDTO";
 
 const userRepository = new UserRepository()
-const registerUserUseCase = new RegisterUserUseCase(userRepository)
-const controller = new UserController(registerUserUseCase)
+const organizationRepository = new OrganizationRepository()
+const registerAdminUseCase = new RegisterAdminUseCase(userRepository, organizationRepository)
+const controller = new UserController(registerAdminUseCase)
 
 export function authRoutes(app: FastifyInstance) {
-  app.post("/register", {
+  app.post("/admin/register", {
     preHandler: [
-      validateBody(registerUserSchema)
+      validateBody(registerAdminSchema)
     ]
   }, async (req: FastifyRequest, res: FastifyReply) => controller.register(req, res));
 }

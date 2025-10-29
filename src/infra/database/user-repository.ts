@@ -19,6 +19,8 @@ export class UserRepository implements IUserRepository {
       record.email,
       record.phone,
       record.passwordHash,
+      record.organizationId,
+      record.role
     )
   }
 
@@ -37,6 +39,8 @@ export class UserRepository implements IUserRepository {
       record.email,
       record.phone,
       record.passwordHash,
+      record.organizationId,
+      record.role
     )
   }
 
@@ -48,6 +52,8 @@ export class UserRepository implements IUserRepository {
         email: user.email,
         phone: user.phone,
         passwordHash: user.getPasswordHash(),
+        organizationId: user.organizationId,
+        role: user.role,
       }
     })
     return new User(
@@ -56,6 +62,8 @@ export class UserRepository implements IUserRepository {
       record.email,
       record.phone,
       record.passwordHash,
+      record.organizationId,
+      record.role
     )
   }
 
@@ -74,6 +82,8 @@ export class UserRepository implements IUserRepository {
       record.email,
       record.phone,
       record.passwordHash,
+      record.organizationId,
+      record.role
     )
   }
 }

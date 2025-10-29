@@ -1,20 +1,22 @@
-FROM node:20-bullseye AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
+RUN apk add --no-cache netcat-openbsd openssl openssl-dev
 COPY package.json yarn.lock ./
-
-RUN yarn config set enableScripts true
-RUN yarn install --frozen-lockfile --unsafe-perm
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 RUN npx prisma generate
 
-FROM node:20-bullseye AS runner
+RUN yarn build
 
-WORKDIR /app
+EXPOSE 3333
 
-COPY --from=builder /app ./
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["yarn", "start"]

@@ -9,6 +9,7 @@ const start = async () => {
     await app.listen({ port: 3333, host: "0.0.0.0" });
     console.log("🚀 --> Server running on http://localhost:3333");
     console.log("📖 --> Documentation available at http://localhost:3333/docs");
+    console.log("🌐 --> Prisma Studio available at http://localhost:5555");
   } catch (err) {
     app.log.error(err);
     process.exit(1);

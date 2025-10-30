@@ -24,7 +24,7 @@ export const registerUserResponseSchemaDocs = {
           createdAt: { type: 'string' },
         }
       },
-      accessToken: { type: 'string' },
+      access_token: { type: 'string' },
     }
   },
   400: {

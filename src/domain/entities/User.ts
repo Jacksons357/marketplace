@@ -1,4 +1,6 @@
 
+import bcrypt from "bcryptjs";
+
 export class User {
   public id: string;
   public createdAt: Date;
@@ -12,10 +14,6 @@ export class User {
   ) {
     this.id = id
     this.createdAt = new Date()
-  }
-
-  public checkPassword(password: string){
-    return password === this.passwordHash
   }
 
   public getPasswordHash(){

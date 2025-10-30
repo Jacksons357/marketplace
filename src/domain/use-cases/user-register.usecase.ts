@@ -1,10 +1,9 @@
-import { AppError } from "../../../shared/errors/app-error";
-import { UserAlreadyExistsError } from "../../../shared/errors/user-already-exists-error";
-import { generateAccessToken } from "../../../utils/generate-access-token";
-import { RegisterUserDTO } from "../../dtos/RegisterUserDTO";
-import { User } from "../../entities/User";
-import { IUserRepository } from "../../repositories/IUserRepository";
-import * as bcrypt from "bcryptjs"
+import { AppError } from "../../shared/errors/app-error";
+import { UserAlreadyExistsError } from "../../shared/errors/user-already-exists-error";
+import { RegisterUserDTO } from "../../application/dtos/RegisterUserDTO";
+import { User } from "../entities/User";
+import { IUserRepository } from "../repositories/IUserRepository";
+import { PasswordService } from "../../application/services/password.service";
 
 export class RegisterUserUseCase {
   constructor(
@@ -22,7 +21,7 @@ export class RegisterUserUseCase {
       throw new UserAlreadyExistsError()
     }
 
-    const passwordHash = await bcrypt.hash(data.password, 10)
+    const passwordHash = await PasswordService.hash(data.password)
     const user = new User(
       crypto.randomUUID(),
       data.name,
@@ -35,12 +34,6 @@ export class RegisterUserUseCase {
     } catch (error) {
       throw new AppError("Error creating user", 400)
     }
-    
-    const access_token = generateAccessToken(user.id)
-
-    return {
-      user: user.sanitize(),
-      access_token,
-    }
+    return user
   }
 }

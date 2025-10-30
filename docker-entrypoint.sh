@@ -10,11 +10,11 @@ echo "PostgreSQL is ready!"
 
 # Run migrations
 echo "Running database migrations..."
-npx prisma migrate deploy
+npx prisma migrate deploy --schema src/infra/database/prisma/schema.prisma
 
 # Generate Prisma client if needed
 echo "Generating Prisma client..."
-npx prisma generate
+npx prisma generate --schema src/infra/database/prisma/schema.prisma
 
 # Execute the passed command
 exec "$@"

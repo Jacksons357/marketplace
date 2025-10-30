@@ -11,7 +11,7 @@ COPY . .
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-RUN npx prisma generate
+RUN npx prisma generate --schema src/infra/database/prisma/schema.prisma
 
 RUN yarn build
 

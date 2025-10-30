@@ -1,17 +1,16 @@
-import { AppError } from "../../../shared/errors/app-error";
-import { UserAlreadyExistsError } from "../../../shared/errors/user-already-exists-error";
-import { generateAccessToken } from "../../../utils/generate-access-token";
-import { RegisterAdminDTO } from "../../dtos/RegisterAdminDTO";
-import { Organization } from "../../entities/Organization";
-import { Admin } from "../../entities/Admin";
-import { IOrganizationRepository } from "../../repositories/IOrganizationRepository";
-import { IAdminRepository } from "../../repositories/IAdminRepository";
-import * as bcrypt from "bcryptjs"
+import { AppError } from "../../shared/errors/app-error";
+import { UserAlreadyExistsError } from "../../shared/errors/user-already-exists-error";
+import { RegisterAdminDTO } from "../../application/dtos/RegisterAdminDTO";
+import { Organization } from "../entities/Organization";
+import { Admin } from "../entities/Admin";
+import { IOrganizationRepository } from "../repositories/IOrganizationRepository";
+import { IAdminRepository } from "../repositories/IAdminRepository";
+import { PasswordService } from "../../application/services/password.service";
 
 export class RegisterAdminUseCase {
   constructor(
     private adminRepository: IAdminRepository,
-    private organizationRepository: IOrganizationRepository
+    private organizationRepository: IOrganizationRepository,
   ) {}
 
   async execute(data: RegisterAdminDTO) {
@@ -36,7 +35,7 @@ export class RegisterAdminUseCase {
       throw new AppError("Error creating organization", 400)
     }
 
-    const passwordHash = await bcrypt.hash(data.password, 10)
+    const passwordHash = await PasswordService.hash(data.password)
     const admin = new Admin(
       crypto.randomUUID(),
       data.name,
@@ -51,12 +50,7 @@ export class RegisterAdminUseCase {
     } catch (error) {
       throw new AppError("Error creating user", 400)
     }
-    
-    const access_token = generateAccessToken(admin.id)
 
-    return {
-      admin: admin.sanitize(),
-      access_token,
-    }
+    return admin
   }
 }

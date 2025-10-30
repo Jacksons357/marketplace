@@ -1,6 +1,6 @@
-import { prisma } from "../../../prisma/client"
-import { Organization } from "../../domain/entities/Organization"
-import { IOrganizationRepository } from "../../domain/repositories/IOrganizationRepository"
+import { prisma } from "../prisma/client"
+import { Organization } from "../../../domain/entities/Organization"
+import { IOrganizationRepository } from "../../../domain/repositories/IOrganizationRepository"
 
 export class OrganizationRepository implements IOrganizationRepository {
   async create(org: Organization): Promise<Organization> {

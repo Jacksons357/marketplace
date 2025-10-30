@@ -1,5 +1,5 @@
-import { prisma } from "../../../../prisma/client";
-import { Admin } from "../../../domain/entities/Admin";
+import { prisma } from "../prisma/client";
+import { Admin, UserRole } from "../../../domain/entities/Admin";
 import { IAdminRepository } from "../../../domain/repositories/IAdminRepository";
 
 export class AdminRepository implements IAdminRepository {
@@ -20,7 +20,7 @@ export class AdminRepository implements IAdminRepository {
       record.phone,
       record.passwordHash,
       record.organizationId,
-      record.role
+      record.role as UserRole
     )
   }
 
@@ -40,7 +40,7 @@ export class AdminRepository implements IAdminRepository {
       record.phone,
       record.passwordHash,
       record.organizationId,
-      record.role
+      record.role as UserRole
     )
   }
 
@@ -63,7 +63,7 @@ export class AdminRepository implements IAdminRepository {
       record.phone,
       record.passwordHash,
       record.organizationId,
-      record.role
+      record.role as UserRole
     )
   }
 
@@ -83,7 +83,7 @@ export class AdminRepository implements IAdminRepository {
       record.phone,
       record.passwordHash,
       record.organizationId,
-      record.role
+      record.role as UserRole
     )
   }
 }

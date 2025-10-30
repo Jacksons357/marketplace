@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma/client";
+import { prisma } from "../prisma/client";
 import { User } from "../../../domain/entities/User";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 

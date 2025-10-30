@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { AppError } from "../errors/app-error";
+import { AppError } from "../../../shared/errors/app-error";
 
 const validateBody = (schema: z.ZodSchema) => async (req: FastifyRequest, res: FastifyReply) => {
   const result = schema.safeParse(req.body);

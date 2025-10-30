@@ -12,7 +12,7 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
-    command: sh -c "npx prisma migrate deploy && yarn dev"
+    command: sh -c "yarn prisma:migrate && yarn dev"
     restart: unless-stopped
 
   db:
@@ -37,7 +37,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     ports:
       - "5555:5555"
-    command: npx prisma studio
+    command: npx prisma studio --schema src/infra/database/prisma/schema.prisma
     restart: unless-stopped
 
 volumes:

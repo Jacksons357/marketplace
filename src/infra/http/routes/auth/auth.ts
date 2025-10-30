@@ -1,30 +1,21 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { AdminController } from "../../controllers/admin/admin-controller";
-import { RegisterAdminUseCase } from "../../../../domain/use-cases/admin/register-admin";
-import { OrganizationRepository } from "../../../database/organization-repository";
-import { registerAdminSchema } from "../../../../domain/dtos/RegisterAdminDTO";
-import { registerUserSchema } from "../../../../domain/dtos/RegisterUserDTO";
-import { UserController } from "../../controllers/user/user-controller";
-import { RegisterUserUseCase } from "../../../../domain/use-cases/user/register-user";
-import validateBody from "../../../../shared/middlewares/validate-body";
-import { AdminRepository } from "../../../database/admin/admin-repository";
-import { UserRepository } from "../../../database/user/user-repository";
+import { registerAdminSchema } from "../../../../application/dtos/RegisterAdminDTO";
+import { registerUserSchema } from "../../../../application/dtos/RegisterUserDTO";
+import validateBody from "../../../http/middlewares/validate-body";
 import { 
   registerAdminBodySchemaDocs, 
   registerAdminResponseSchemaDocs, 
   registerUserBodySchemaDocs, 
   registerUserResponseSchemaDocs 
-} from "../../../../docs/swagger";
-
-const adminRepository = new AdminRepository()
-const organizationRepository = new OrganizationRepository()
-const registerAdminUseCase = new RegisterAdminUseCase(adminRepository, organizationRepository)
-const adminController = new AdminController(registerAdminUseCase)
-const userRepository = new UserRepository()
-const registerUserUseCase = new RegisterUserUseCase(userRepository)
-const userController = new UserController(registerUserUseCase)
+} from "../../../../presentation/docs/swagger";
+import { loginUserSchema } from "../../../../application/dtos/LoginUserDTO";
+import { makeUserController } from "../../../factories/make-register-user";
+import { makeAdminController } from "../../../factories/make-register-admin";
 
 export function authRoutes(app: FastifyInstance) {
+  const userController = makeUserController()
+  const adminController = makeAdminController()
+
   app.post("/admin/register", {
     schema: {
       tags: ['Auth'],
@@ -50,4 +41,17 @@ export function authRoutes(app: FastifyInstance) {
       validateBody(registerUserSchema)
     ]
   }, async (req: FastifyRequest, res: FastifyReply) => userController.register(req, res));
+
+  app.post('/user/login', {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Login a user',
+      description: 'Login a user in the system and sign in with access token',
+      // body: loginUserSchema,
+      // response: loginUserResponseSchemaDocs,
+    },
+    preHandler: [
+      validateBody(loginUserSchema)
+    ]
+  }, async (req: FastifyRequest, res: FastifyReply) => userController.login(req, res))
 }

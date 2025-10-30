@@ -8,9 +8,8 @@ import { UserRepository } from "../database/repositories/user-repository";
 export function makeUserController() {
   const userRepository = new UserRepository();
   const registerUserUseCase = new RegisterUserUseCase(userRepository);
-  const loginUserUseCase = new LoginUserUseCase(userRepository);
   const tokenService = new TokenService ();
-  const authService = new AuthUserService(tokenService, registerUserUseCase, loginUserUseCase);
+  const authService = new AuthUserService(tokenService, registerUserUseCase);
 
   return new AuthUserController(authService);
 }

@@ -16,7 +16,7 @@ export const registerAdminResponseSchemaDocs = {
     description: 'Admin Created',
     type: 'object',
     properties: {
-      admin: {
+      user: {
         type: 'object',
         properties: {
           id: { type: 'string', },

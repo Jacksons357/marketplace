@@ -12,10 +12,13 @@ import {
 import { loginUserSchema } from "../../../application/dtos/LoginUserDTO";
 import { makeUserController } from "../../factories/make-register-user";
 import { makeAdminController } from "../../factories/make-register-admin";
+import { authMiddleware, requireUser } from "../middlewares/auth.middleware";
+import { makeAuthController } from "../../factories/make-auth";
 
 export function authRoutes(app: FastifyInstance) {
   const userController = makeUserController()
   const adminController = makeAdminController()
+  const authController = makeAuthController()
 
   app.post("/admin/register", {
     schema: {
@@ -54,5 +57,11 @@ export function authRoutes(app: FastifyInstance) {
     preHandler: [
       validateBody(loginUserSchema)
     ]
-  }, async (req: FastifyRequest, res: FastifyReply) => userController.login(req, res))
+  }, async (req: FastifyRequest, res: FastifyReply) => authController.login(req, res))
+
+  app.get('/me', {
+    preHandler: [
+      authMiddleware,
+    ]
+  }, async (req: FastifyRequest, res: FastifyReply) => authController.me(req, res))
 }

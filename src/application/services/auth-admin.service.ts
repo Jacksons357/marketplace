@@ -6,7 +6,6 @@ export class AuthAdminService {
   constructor(
     private tokenService: TokenService,
     private registerAdminUseCase: RegisterAdminUseCase,
-    // private loginAdminUseCase: LoginAdminUseCase, TODO: implementar.
   ) {}
 
   async register(data: RegisterAdminDTO) {

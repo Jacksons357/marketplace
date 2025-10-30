@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { RegisterAdminUseCase } from "../../domain/use-cases/admin-register.usecase";
 import { RegisterAdminDTO } from "../dtos/RegisterAdminDTO";
 import { AuthAdminService } from "../services/auth-admin.service";
+import { Admin } from "../../domain/entities/Admin";
+import { User } from "../../domain/entities/User";
 
 export class AuthAdminController {
   constructor(private authAdminService: AuthAdminService) {}

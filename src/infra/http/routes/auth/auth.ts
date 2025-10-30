@@ -9,7 +9,12 @@ import { RegisterUserUseCase } from "../../../../domain/use-cases/user/register-
 import validateBody from "../../../../shared/middlewares/validate-body";
 import { AdminRepository } from "../../../database/admin/admin-repository";
 import { UserRepository } from "../../../database/user/user-repository";
-import { registerBodySchemaDocs, registerResponseSchemaDocs } from "../../../../docs/swagger/auth";
+import { 
+  registerAdminBodySchemaDocs, 
+  registerAdminResponseSchemaDocs, 
+  registerUserBodySchemaDocs, 
+  registerUserResponseSchemaDocs 
+} from "../../../../docs/swagger";
 
 const adminRepository = new AdminRepository()
 const organizationRepository = new OrganizationRepository()
@@ -25,8 +30,8 @@ export function authRoutes(app: FastifyInstance) {
       tags: ['Auth'],
       summary: 'Register a new admin',
       description: 'Register a new admin with organization in the system and sign in with access token',
-      body: registerBodySchemaDocs,
-      response: registerResponseSchemaDocs,
+      body: registerAdminBodySchemaDocs,
+      response: registerAdminResponseSchemaDocs,
     },
     preHandler: [
       validateBody(registerAdminSchema) 
@@ -34,6 +39,13 @@ export function authRoutes(app: FastifyInstance) {
   }, async (req: FastifyRequest, res: FastifyReply) => adminController.register(req, res));
 
   app.post('/user/register', {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Register a new user',
+      description: 'Register a new user in the system and sign in with access token',
+      body: registerUserBodySchemaDocs,
+      response: registerUserResponseSchemaDocs,
+    },
     preHandler: [
       validateBody(registerUserSchema)
     ]

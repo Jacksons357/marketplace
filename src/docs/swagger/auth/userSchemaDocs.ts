@@ -1,30 +1,26 @@
-export const registerAdminBodySchemaDocs = {
+export const registerUserBodySchemaDocs = {
   type: 'object',
-  required: ['name', 'email', 'phone', 'password', 'organizationName', 'organizationDescription'],
+  required: ['name', 'email', 'phone', 'password'],
   properties: {
     name:{ type: 'string' },
     email: { type: 'string' },
     phone: { type: 'string' },
     password: { type: 'string' },
-    organizationName: { type: 'string' },
-    organizationDescription: { type: 'string' }
   }
 }
 
-export const registerAdminResponseSchemaDocs = {
+export const registerUserResponseSchemaDocs = {
   201: {
-    description: 'Admin Created',
+    description: 'User Created',
     type: 'object',
     properties: {
-      admin: {
+      user: {
         type: 'object',
         properties: {
           id: { type: 'string', },
           name: { type: 'string' },
           email: { type: 'string' },
           phone: { type: 'string' },
-          organizationId: { type: 'string' },
-          role: { type: 'string' },
           createdAt: { type: 'string' },
         }
       },

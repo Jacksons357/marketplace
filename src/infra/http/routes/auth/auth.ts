@@ -1,18 +1,57 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { UserController } from "../../controllers/user-controller";
-import { RegisterUserUseCase } from "../../../../domain/use-cases/register-user";
-import { UserRepository } from "../../../database/user-repository";
-import { registerUserSchema } from "../../../../domain/dtos/RegisterUserDTO";
-import validateBody from "../../../../shared/middlewares/validate-body";
-
-const userRepository = new UserRepository()
-const registerUserUseCase = new RegisterUserUseCase(userRepository)
-const controller = new UserController(registerUserUseCase)
+import { registerAdminSchema } from "../../../../application/dtos/RegisterAdminDTO";
+import { registerUserSchema } from "../../../../application/dtos/RegisterUserDTO";
+import validateBody from "../../../http/middlewares/validate-body";
+import { 
+  registerAdminBodySchemaDocs, 
+  registerAdminResponseSchemaDocs, 
+  registerUserBodySchemaDocs, 
+  registerUserResponseSchemaDocs 
+} from "../../../../presentation/docs/swagger";
+import { loginUserSchema } from "../../../../application/dtos/LoginUserDTO";
+import { makeUserController } from "../../../factories/make-register-user";
+import { makeAdminController } from "../../../factories/make-register-admin";
 
 export function authRoutes(app: FastifyInstance) {
-  app.post("/register", {
+  const userController = makeUserController()
+  const adminController = makeAdminController()
+
+  app.post("/admin/register", {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Register a new admin',
+      description: 'Register a new admin with organization in the system and sign in with access token',
+      body: registerAdminBodySchemaDocs,
+      response: registerAdminResponseSchemaDocs,
+    },
+    preHandler: [
+      validateBody(registerAdminSchema) 
+    ]
+  }, async (req: FastifyRequest, res: FastifyReply) => adminController.register(req, res));
+
+  app.post('/user/register', {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Register a new user',
+      description: 'Register a new user in the system and sign in with access token',
+      body: registerUserBodySchemaDocs,
+      response: registerUserResponseSchemaDocs,
+    },
     preHandler: [
       validateBody(registerUserSchema)
     ]
-  }, async (req: FastifyRequest, res: FastifyReply) => controller.register(req, res));
+  }, async (req: FastifyRequest, res: FastifyReply) => userController.register(req, res));
+
+  app.post('/user/login', {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Login a user',
+      description: 'Login a user in the system and sign in with access token',
+      // body: loginUserSchema,
+      // response: loginUserResponseSchemaDocs,
+    },
+    preHandler: [
+      validateBody(loginUserSchema)
+    ]
+  }, async (req: FastifyRequest, res: FastifyReply) => userController.login(req, res))
 }

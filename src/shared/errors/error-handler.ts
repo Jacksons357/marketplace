@@ -7,7 +7,7 @@ export function errorHandler(
   reply: FastifyReply
 ) {
   if (error instanceof AppError) {
-    return reply.status(error.statusCode).send({
+    return reply.status(error.code).send({
       error: error.name,
       message: error.message,
     })

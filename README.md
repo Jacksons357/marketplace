@@ -1,6 +1,7 @@
 # Marketplace Multi-ONG
 
 Uma API para gerenciamento de marketplace com suporte a múltiplas ONGs.
+Principios: SOLID, DDD, Clean code.
 
 ---
 
@@ -32,5 +33,47 @@ docker-compose up --build -d
 ```
 
 Acesse a documentação da API em [http://localhost:3333/docs](http://localhost:3333/docs).
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+marketplace-backend/
+├── src/
+│   ├── application/
+│   │   ├── controllers/
+│   │   ├── dtos/
+│   │   └── services/
+│   ├── domain/
+│   │   ├── entities/
+│   │   ├── repositories/
+│   │   └── use-cases/
+│   ├── infra/
+│   │   ├── database/
+│   │   │   ├── prisma/
+│   │   │   └── repositories/
+│   │   ├── factories/
+│   │   └── http/
+│   │   │   ├── middlewares/
+│   │   │   └── routes/
+│   ├── presentation/
+│   │   └── docs/
+│   ├── app.ts
+│   ├── server.ts
+│   ├── shared/
+│   │   └── errors/
+│   └── utils/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── README.md
+├── docker-compose.yml
+├── docker-entrypoint.sh
+├── package.json
+├── tsconfig.json
+└── yarn.lock
+```
 
 ---

@@ -7,10 +7,11 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "docker:seed": "docker exec -it marketplace_api npx prisma db seed"
+    "docker:seed": "docker exec -it marketplace_api npx prisma db seed --schema src/infra/database/prisma/schema.prisma",
+    "prisma:migrate": "npx prisma migrate deploy --schema src/infra/database/prisma/schema.prisma"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node src/infra/database/prisma/seed.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.1.0",

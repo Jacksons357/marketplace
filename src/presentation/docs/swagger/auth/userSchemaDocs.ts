@@ -44,3 +44,12 @@ export const registerUserResponseSchemaDocs = {
     }
   }
 }
+
+export const loginUserBodySchemaDocs = {
+  type: 'object',
+  required: ['email', 'password'],
+  properties: {
+    email: { type: 'string' },
+    password: { type: 'string' },
+  }
+}

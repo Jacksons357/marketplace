@@ -1,16 +1,17 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { registerAdminSchema } from "../../../../application/dtos/RegisterAdminDTO";
-import { registerUserSchema } from "../../../../application/dtos/RegisterUserDTO";
-import validateBody from "../../../http/middlewares/validate-body";
+import { registerAdminSchema } from "../../../application/dtos/RegisterAdminDTO";
+import { registerUserSchema } from "../../../application/dtos/RegisterUserDTO";
+import validateBody from "../middlewares/validate-body";
 import { 
+  loginUserBodySchemaDocs,
   registerAdminBodySchemaDocs, 
   registerAdminResponseSchemaDocs, 
   registerUserBodySchemaDocs, 
   registerUserResponseSchemaDocs 
-} from "../../../../presentation/docs/swagger";
-import { loginUserSchema } from "../../../../application/dtos/LoginUserDTO";
-import { makeUserController } from "../../../factories/make-register-user";
-import { makeAdminController } from "../../../factories/make-register-admin";
+} from "../../../presentation/docs/swagger";
+import { loginUserSchema } from "../../../application/dtos/LoginUserDTO";
+import { makeUserController } from "../../factories/make-register-user";
+import { makeAdminController } from "../../factories/make-register-admin";
 
 export function authRoutes(app: FastifyInstance) {
   const userController = makeUserController()
@@ -47,8 +48,8 @@ export function authRoutes(app: FastifyInstance) {
       tags: ['Auth'],
       summary: 'Login a user',
       description: 'Login a user in the system and sign in with access token',
-      // body: loginUserSchema,
-      // response: loginUserResponseSchemaDocs,
+      body: loginUserBodySchemaDocs,
+      response: registerUserResponseSchemaDocs,
     },
     preHandler: [
       validateBody(loginUserSchema)

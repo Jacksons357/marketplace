@@ -3,7 +3,7 @@ import { UserAlreadyExistsError } from "../../../shared/errors/user-already-exis
 import { generateAccessToken } from "../../../utils/generate-access-token";
 import { RegisterAdminDTO } from "../../dtos/RegisterAdminDTO";
 import { Organization } from "../../entities/Organization";
-import { User } from "../../entities/Admin";
+import { Admin } from "../../entities/Admin";
 import { IOrganizationRepository } from "../../repositories/IOrganizationRepository";
 import { IAdminRepository } from "../../repositories/IAdminRepository";
 import * as bcrypt from "bcryptjs"
@@ -37,7 +37,7 @@ export class RegisterAdminUseCase {
     }
 
     const passwordHash = await bcrypt.hash(data.password, 10)
-    const user = new User(
+    const admin = new Admin(
       crypto.randomUUID(),
       data.name,
       data.email,
@@ -47,15 +47,15 @@ export class RegisterAdminUseCase {
       "ADMIN"
     )
     try {
-      await this.adminRepository.create(user)
+      await this.adminRepository.create(admin)
     } catch (error) {
       throw new AppError("Error creating user", 400)
     }
     
-    const access_token = generateAccessToken(user.id)
+    const access_token = generateAccessToken(admin.id)
 
     return {
-      user: user.sanitize(),
+      admin: admin.sanitize(),
       access_token,
     }
   }

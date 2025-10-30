@@ -9,6 +9,7 @@ import { RegisterUserUseCase } from "../../../../domain/use-cases/user/register-
 import validateBody from "../../../../shared/middlewares/validate-body";
 import { AdminRepository } from "../../../database/admin/admin-repository";
 import { UserRepository } from "../../../database/user/user-repository";
+import { registerBodySchemaDocs, registerResponseSchemaDocs } from "../../../../docs/swagger/auth";
 
 const adminRepository = new AdminRepository()
 const organizationRepository = new OrganizationRepository()
@@ -20,6 +21,13 @@ const userController = new UserController(registerUserUseCase)
 
 export function authRoutes(app: FastifyInstance) {
   app.post("/admin/register", {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Register a new admin',
+      description: 'Register a new admin with organization in the system and sign in with access token',
+      body: registerBodySchemaDocs,
+      response: registerResponseSchemaDocs,
+    },
     preHandler: [
       validateBody(registerAdminSchema) 
     ]

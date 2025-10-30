@@ -1,4 +1,4 @@
-export type UserRole = "ADMIN" | "USER"
+export type UserRole = "ADMIN"
 
 export class Admin {
   public id: string;
@@ -13,7 +13,7 @@ export class Admin {
     public phone: string | null,
     private passwordHash: string,
     organizationId: string | null,
-    role: UserRole = "USER"
+    role: UserRole = "ADMIN"
   ) {
     this.id = id
     this.organizationId = organizationId

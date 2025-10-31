@@ -1,3 +1,13 @@
+export const headersSchemaDocs = {
+  type: 'object',
+  properties: {
+    Authorization: {
+      type: 'string',
+      description: 'Bearer token',
+    },
+  },
+}
+
 export const registerAdminBodySchemaDocs = {
   type: 'object',
   required: ['name', 'email', 'phone', 'password', 'organizationName', 'organizationDescription'],

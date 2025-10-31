@@ -3,6 +3,7 @@ import { registerAdminSchema } from "../../../application/dtos/RegisterAdminDTO"
 import { registerUserSchema } from "../../../application/dtos/RegisterUserDTO";
 import validateBody from "../middlewares/validate-body";
 import { 
+  headersSchemaDocs,
   loginUserBodySchemaDocs,
   registerAdminBodySchemaDocs, 
   registerAdminResponseSchemaDocs, 
@@ -64,15 +65,7 @@ export function authRoutes(app: FastifyInstance) {
       tags: ['Auth'],
       summary: 'Fetch authenticated user profile',
       description: 'Retrieves the profile data of the currently logged-in user based on the access token.',
-      headers: {
-        type: 'object',
-        properties: {
-          Authorization: {
-            type: 'string',
-            description: 'Bearer token',
-          },
-        },
-      },
+      headers: headersSchemaDocs,
       security: [{ BearerAuth: []}],
     },
     preHandler: [

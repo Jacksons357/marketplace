@@ -46,7 +46,7 @@ export function authRoutes(app: FastifyInstance) {
     ]
   }, async (req: FastifyRequest, res: FastifyReply) => userController.register(req, res));
 
-  app.post('/user/login', {
+  app.post('/login', {
     schema: {
       tags: ['Auth'],
       summary: 'Login a user',

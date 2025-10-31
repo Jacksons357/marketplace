@@ -20,7 +20,6 @@ export async function authMiddleware(req: FastifyRequest, res: FastifyReply) {
 
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     req.user = payload;
-    console.log('[Middleware] payload: ', payload)
   } catch {
     return res.status(401).send({ message: "Unauthorized" });
   }

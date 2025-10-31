@@ -1,5 +1,5 @@
 import { Product } from "../../../domain/entities/Product";
-import { IProductRepository, ListProductFilters } from "../../../domain/repositories/IProductRepository";
+import { IProductRepository, ListProductFilters, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
 import { prisma } from "../prisma/client";
 
 export class ProductRepository implements IProductRepository {
@@ -50,6 +50,26 @@ export class ProductRepository implements IProductRepository {
       skip,
       take: limit,
       orderBy: { createdAt: 'desc' }
+    })
+  }
+
+  async findById(productId: string): Promise<Product | null> {
+    return await prisma.product.findUnique({
+      where: {
+        id: productId,
+      }
+    })
+  }
+
+  async update(params: ProductAdminUpdateParams): Promise<Product> {
+    const { productId, data } = params
+    return await prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        ...data,
+      }
     })
   }
 }

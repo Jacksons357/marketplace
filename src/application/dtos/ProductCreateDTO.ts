@@ -13,7 +13,7 @@ export const productCreateSchema = z.object({
   }, z.number().min(0)),
 
   category: z.string().min(1),
-  imageUrl: z.string().url(),
+  imageUrl: z.url(),
   stockQty: z.number().min(0),
   weightGrams: z.number().min(0),
 }).strict();

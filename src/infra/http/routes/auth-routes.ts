@@ -20,7 +20,7 @@ export function authRoutes(app: FastifyInstance) {
   const adminController = makeAdminController()
   const authController = makeAuthController()
 
-  app.post("/admin/register", {
+  app.post("/admin", {
     schema: {
       tags: ['Auth'],
       summary: 'Register a new admin',
@@ -33,7 +33,7 @@ export function authRoutes(app: FastifyInstance) {
     ]
   }, async (req: FastifyRequest, res: FastifyReply) => adminController.register(req, res));
 
-  app.post('/user/register', {
+  app.post('/user', {
     schema: {
       tags: ['Auth'],
       summary: 'Register a new user',
@@ -46,7 +46,7 @@ export function authRoutes(app: FastifyInstance) {
     ]
   }, async (req: FastifyRequest, res: FastifyReply) => userController.register(req, res));
 
-  app.post('/user/login', {
+  app.post('/login', {
     schema: {
       tags: ['Auth'],
       summary: 'Login a user',

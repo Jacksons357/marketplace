@@ -25,8 +25,6 @@ export class AuthService {
       phone: user.phone || undefined,
     })
 
-    console.log('[Auth Service] user: ', user)
-    console.log('[Auth Service] token: ', token)
     return {
       user: user.sanitize(),
       access_token: token,

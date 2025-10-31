@@ -7,6 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "docker:migrate": "docker exec -it marketplace_api npx prisma migrate dev --schema src/infra/database/prisma/schema.prisma",
     "docker:seed": "docker exec -it marketplace_api npx prisma db seed --schema src/infra/database/prisma/schema.prisma",
     "prisma:migrate": "npx prisma migrate deploy --schema src/infra/database/prisma/schema.prisma"
   },
@@ -32,6 +33,7 @@
     "prisma": "5.1.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.5"
   }
 }

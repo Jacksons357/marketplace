@@ -2,7 +2,7 @@
 
 Uma API para gerenciamento de marketplace com suporte a múltiplas ONGs.
 
-- SOLID, DDD, Clean code e Clean Architecture.
+Principios: SOLID, DDD, Clean code e Clean architecture.
 
 ---
 
@@ -35,6 +35,12 @@ docker-compose up --build -d
 
 Acesse a documentação da API em [http://localhost:3333/docs](http://localhost:3333/docs).
 
+Rode os seeds para popular o banco de dados:
+
+```bash
+yarn docker:seed
+```
+
 ---
 
 ## 📁 Estrutura do Projeto
@@ -60,11 +66,15 @@ marketplace-backend/
 │   │   │   └── routes/
 │   ├── presentation/
 │   │   └── docs/
-│   ├── app.ts
-│   ├── server.ts
 │   ├── shared/
 │   │   └── errors/
-│   └── utils/
+│   ├── tests/
+│   │   ├── repositories/
+│   │   └── use-cases/
+│   ├── types/
+│   ├── utils/
+│   ├── app.ts
+│   ├── server.ts
 ├── .dockerignore
 ├── .env.example
 ├── .gitignore

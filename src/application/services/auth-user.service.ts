@@ -1,6 +1,4 @@
-import { LoginUserUseCase } from "../../domain/use-cases/user-login.usecase";
 import { RegisterUserUseCase } from "../../domain/use-cases/user-register.usecase";
-import { LoginUserDTO } from "../dtos/LoginUserDTO";
 import { RegisterUserDTO } from "../dtos/RegisterUserDTO";
 import { TokenService } from "./token.service";
 

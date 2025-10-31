@@ -1,5 +1,6 @@
-
 import bcrypt from "bcryptjs";
+
+export type UserRole = "USER" | "ADMIN";
 
 export class User {
   public id: string;
@@ -11,13 +12,19 @@ export class User {
     public email: string,
     public phone: string | null,
     private passwordHash: string,
+    public role: UserRole,
+    public organizationId?: string | null,
   ) {
-    this.id = id
-    this.createdAt = new Date()
+    this.id = id;
+    this.createdAt = new Date();
   }
 
-  public getPasswordHash(){
-    return this.passwordHash
+  public async checkPassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.passwordHash);
+  }
+
+  public getPasswordHash() {
+    return this.passwordHash;
   }
 
   public sanitize() {
@@ -26,8 +33,10 @@ export class User {
       name: this.name,
       email: this.email,
       phone: this.phone,
+      role: this.role,
+      organizationId: this.organizationId,
       createdAt: this.createdAt,
-    }
+    };
   }
 
   public toJSON() {

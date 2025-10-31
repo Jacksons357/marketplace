@@ -60,6 +60,21 @@ export function authRoutes(app: FastifyInstance) {
   }, async (req: FastifyRequest, res: FastifyReply) => authController.login(req, res))
 
   app.get('/me', {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Fetch authenticated user profile',
+      description: 'Retrieves the profile data of the currently logged-in user based on the access token.',
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: {
+            type: 'string',
+            description: 'Bearer token',
+          },
+        },
+      },
+      security: [{ BearerAuth: []}],
+    },
     preHandler: [
       authMiddleware,
     ]

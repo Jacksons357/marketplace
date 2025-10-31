@@ -1,9 +1,16 @@
 import jwt from "jsonwebtoken";
 
+interface TokenPayload {
+  sub: string
+  role: 'USER' | 'ADMIN'
+  name: string
+  phone?: string
+}
+
 export class TokenService {
-  generate(userId: string) {
+  generate(payload: TokenPayload) {
     return jwt.sign(
-      { sub: userId }, 
+      payload,
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );

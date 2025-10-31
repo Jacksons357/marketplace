@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { RegisterUserDTO } from "../dtos/RegisterUserDTO";
-import { LoginUserDTO } from "../dtos/LoginUserDTO";
 import { AuthUserService } from "../services/auth-user.service";
 
 export class AuthUserController {

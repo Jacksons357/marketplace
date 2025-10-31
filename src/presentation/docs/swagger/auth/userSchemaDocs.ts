@@ -20,7 +20,9 @@ export const registerUserResponseSchemaDocs = {
           id: { type: 'string', },
           name: { type: 'string' },
           email: { type: 'string' },
+          role: { type: 'string' },
           phone: { type: 'string' },
+          organizationId: { type: 'string' },
           createdAt: { type: 'string' },
         }
       },

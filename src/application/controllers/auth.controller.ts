@@ -8,11 +8,12 @@ export class AuthController {
   async login(req: FastifyRequest, res: FastifyReply) {
     const data = req.body as LoginUserDTO
     const result = await this.authService.login(data)
-    res.status(200).send(result)
+    res.status(201).send(result)
   }
 
   async me(req: FastifyRequest, res: FastifyReply) {
     const user = req.user
+    console.log('[Controller] user me: ', user)
     const result = await this.authService.execute(user)
     return res.status(200).send(result)
   }

@@ -1,7 +1,8 @@
 # Marketplace Multi-ONG
 
 Uma API para gerenciamento de marketplace com suporte a múltiplas ONGs.
-Principios: SOLID, DDD, Clean code.
+
+- SOLID, DDD, Clean code e Clean Architecture.
 
 ---
 

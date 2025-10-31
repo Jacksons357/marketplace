@@ -7,7 +7,7 @@ import { UserNotFoundError } from "../../shared/errors/user-not-found";
 import { AppError } from "../../shared/errors/app-error";
 import { OrganizationNotFoundError } from "../../shared/errors/organization-not-found";
 
-export class ProductCreateUseCase {
+export class ProductAdminCreateUseCase {
   constructor(
     private productRepository: IProductRepository,
     private userRepository: IUserRepository

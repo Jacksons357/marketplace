@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { authRoutes } from "./auth-routes";
-import { productRoutes } from "./product-routes";
+import { adminRoutes } from "./admin-routes";
 
 export function routes(app: FastifyInstance) {
   app.register(authRoutes, { prefix: "/auth" });
-  app.register(productRoutes, { prefix: "/products" });
+  app.register(adminRoutes, { prefix: "/admin" });
 }

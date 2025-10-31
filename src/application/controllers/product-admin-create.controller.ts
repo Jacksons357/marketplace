@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ProductCreateUseCase } from "../../domain/use-cases/product-create.usecase";
+import { ProductAdminCreateUseCase } from "../../domain/use-cases/product-admin-create.usecase";
 import { ProductCreateDTO } from "../dtos/ProductCreateDTO";
 
-export class ProductController {
-  constructor(private productCreateUseCase: ProductCreateUseCase) {}
+export class ProductAdminCreateController {
+  constructor(private productCreateUseCase: ProductAdminCreateUseCase) {}
 
   async create(req: FastifyRequest, res: FastifyReply) {
     const userId = req.user.sub as string

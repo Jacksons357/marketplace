@@ -1,5 +1,5 @@
 import { Product } from "../../../domain/entities/Product";
-import { IProductRepository } from "../../../domain/repositories/IProductRepository";
+import { IProductRepository, ListProductFilters } from "../../../domain/repositories/IProductRepository";
 import { prisma } from "../prisma/client";
 
 export class ProductRepository implements IProductRepository {
@@ -17,5 +17,39 @@ export class ProductRepository implements IProductRepository {
         weightGrams: product.weightGrams,
       },
     });
+  }
+
+  async findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<Product[]> {
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      priceMin,
+      priceMax,
+      search,
+    } = filters || {}
+
+    const skip = (page - 1) * limit
+
+    return prisma.product.findMany({
+      where: {
+        organizationId,
+        ...(category ? { category } : {}),
+        ...(priceMin || priceMax
+          ? { price: { ...(priceMin ? { gte: priceMin } : {}), ...(priceMax ? { lte: priceMax } : {}) } }
+          : {}),
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } }
+              ]
+            }
+          : {})
+      },
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' }
+    })
   }
 }

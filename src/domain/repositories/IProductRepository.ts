@@ -32,4 +32,5 @@ export interface IProductRepository {
   findById(productId: string): Promise<Product | null>
   update(params: ProductAdminUpdateParams): Promise<Product>
   delete(params: ProductAdminDeleteParams): Promise<Product>
+  list(filters?: ListProductFilters): Promise<Product[]>
 }

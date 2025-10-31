@@ -81,4 +81,37 @@ export class ProductRepository implements IProductRepository {
       }
     })
   }
+
+  async list(filters?: ListProductFilters): Promise<Product[]> {
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      priceMin,
+      priceMax,
+      search,
+    } = filters || {}
+
+    const skip = (page - 1) * limit
+
+    return prisma.product.findMany({
+      where: {
+        ...(category ? { category } : {}),
+        ...(priceMin || priceMax
+          ? { price: { ...(priceMin ? { gte: priceMin } : {}), ...(priceMax ? { lte: priceMax } : {}) } }
+          : {}),
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } }
+              ]
+            }
+          : {})
+      },
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' }
+    })
+  }
 }

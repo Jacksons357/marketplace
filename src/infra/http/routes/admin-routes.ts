@@ -6,26 +6,30 @@ import { productCreateSchema } from "../../../application/dtos/ProductCreateDTO"
 import { makeProductAdminListController } from "../../factories/make-product-admin-list";
 import { productUpdateSchema } from "../../../application/dtos/ProductUpdateDTO";
 import { makeProductAdminUpdateController } from "../../factories/make-product-admin-update";
+import { makeProductAdminDeleteController } from "../../factories/make-product-admin-delete";
 
 export function adminRoutes(app: FastifyInstance) {
   app.addHook('preHandler', authMiddleware)
   app.addHook('preHandler', requireAdmin)
 
-  const productController = makeProductAdminCreateController()
-  const productListController = makeProductAdminListController()
+  const productAdminCreateController = makeProductAdminCreateController()
+  const productAdminListController = makeProductAdminListController()
   const productAdminUpdateController = makeProductAdminUpdateController()
+  const productAdminDeleteController = makeProductAdminDeleteController()
 
   app.post('/products', {
     preHandler: [
       validateBody(productCreateSchema)
     ]
-  }, async (req: FastifyRequest, res: FastifyReply) => productController.create(req, res))
+  }, async (req: FastifyRequest, res: FastifyReply) => productAdminCreateController.create(req, res))
 
-  app.get('/products', async (req: FastifyRequest, res: FastifyReply) => productListController.list(req, res))
+  app.get('/products', async (req: FastifyRequest, res: FastifyReply) => productAdminListController.list(req, res))
 
   app.put('/products/:id', {
     preHandler: [
       validateBody(productUpdateSchema)
     ]
   }, async (req: FastifyRequest, res: FastifyReply) => productAdminUpdateController.update(req, res))
+
+  app.delete('/products/:id', async (req: FastifyRequest, res: FastifyReply) => productAdminDeleteController.delete(req, res))
 }

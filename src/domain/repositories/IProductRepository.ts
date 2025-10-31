@@ -21,9 +21,15 @@ export interface ProductAdminUpdateParams {
   data: ProductUpdateDTO
 }
 
+export interface ProductAdminDeleteParams {
+  productId: string
+  organizationId: string
+}
+
 export interface IProductRepository {
   create(product: Product): Promise<Product>
   findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<Product[]>
   findById(productId: string): Promise<Product | null>
   update(params: ProductAdminUpdateParams): Promise<Product>
+  delete(params: ProductAdminDeleteParams): Promise<Product>
 }

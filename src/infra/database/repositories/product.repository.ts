@@ -1,5 +1,5 @@
 import { Product } from "../../../domain/entities/Product";
-import { IProductRepository, ListProductFilters, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
+import { IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
 import { prisma } from "../prisma/client";
 
 export class ProductRepository implements IProductRepository {
@@ -69,6 +69,15 @@ export class ProductRepository implements IProductRepository {
       },
       data: {
         ...data,
+      }
+    })
+  }
+
+  async delete(params: ProductAdminDeleteParams): Promise<Product> {
+    return await prisma.product.delete({
+      where: {
+        id: params.productId,
+        organizationId: params.organizationId,
       }
     })
   }

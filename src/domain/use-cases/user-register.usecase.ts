@@ -28,6 +28,7 @@ export class RegisterUserUseCase {
       data.email,
       data.phone,
       passwordHash,
+      "USER",
     )
     try {
       await this.userRepository.create(user)

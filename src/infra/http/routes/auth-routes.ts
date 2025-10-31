@@ -1,20 +1,24 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { registerAdminSchema } from "../../../../application/dtos/RegisterAdminDTO";
-import { registerUserSchema } from "../../../../application/dtos/RegisterUserDTO";
-import validateBody from "../../../http/middlewares/validate-body";
+import { registerAdminSchema } from "../../../application/dtos/RegisterAdminDTO";
+import { registerUserSchema } from "../../../application/dtos/RegisterUserDTO";
+import validateBody from "../middlewares/validate-body";
 import { 
+  loginUserBodySchemaDocs,
   registerAdminBodySchemaDocs, 
   registerAdminResponseSchemaDocs, 
   registerUserBodySchemaDocs, 
   registerUserResponseSchemaDocs 
-} from "../../../../presentation/docs/swagger";
-import { loginUserSchema } from "../../../../application/dtos/LoginUserDTO";
-import { makeUserController } from "../../../factories/make-register-user";
-import { makeAdminController } from "../../../factories/make-register-admin";
+} from "../../../presentation/docs/swagger";
+import { loginUserSchema } from "../../../application/dtos/LoginUserDTO";
+import { makeUserController } from "../../factories/make-register-user";
+import { makeAdminController } from "../../factories/make-register-admin";
+import { authMiddleware, requireUser } from "../middlewares/auth.middleware";
+import { makeAuthController } from "../../factories/make-auth";
 
 export function authRoutes(app: FastifyInstance) {
   const userController = makeUserController()
   const adminController = makeAdminController()
+  const authController = makeAuthController()
 
   app.post("/admin/register", {
     schema: {
@@ -47,11 +51,32 @@ export function authRoutes(app: FastifyInstance) {
       tags: ['Auth'],
       summary: 'Login a user',
       description: 'Login a user in the system and sign in with access token',
-      // body: loginUserSchema,
-      // response: loginUserResponseSchemaDocs,
+      body: loginUserBodySchemaDocs,
+      response: registerUserResponseSchemaDocs,
     },
     preHandler: [
       validateBody(loginUserSchema)
     ]
-  }, async (req: FastifyRequest, res: FastifyReply) => userController.login(req, res))
+  }, async (req: FastifyRequest, res: FastifyReply) => authController.login(req, res))
+
+  app.get('/me', {
+    schema: {
+      tags: ['Auth'],
+      summary: 'Fetch authenticated user profile',
+      description: 'Retrieves the profile data of the currently logged-in user based on the access token.',
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: {
+            type: 'string',
+            description: 'Bearer token',
+          },
+        },
+      },
+      security: [{ BearerAuth: []}],
+    },
+    preHandler: [
+      authMiddleware,
+    ]
+  }, async (req: FastifyRequest, res: FastifyReply) => authController.me(req, res))
 }

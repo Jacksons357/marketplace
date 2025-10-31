@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { authRoutes } from "./auth/auth";
+import { authRoutes } from "./auth-routes";
 
 export function routes(app: FastifyInstance) {
   app.register(authRoutes, { prefix: "/auth" });

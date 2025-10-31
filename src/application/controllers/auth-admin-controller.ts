@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { RegisterAdminUseCase } from "../../domain/use-cases/admin-register.usecase";
 import { RegisterAdminDTO } from "../dtos/RegisterAdminDTO";
 import { AuthAdminService } from "../services/auth-admin.service";
 

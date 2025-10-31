@@ -26,6 +26,10 @@ export interface ProductAdminDeleteParams {
   organizationId: string
 }
 
+export interface AiParsedFilters extends ListProductFilters {
+  interpretation?: string
+}
+
 export interface IProductRepository {
   create(product: Product): Promise<Product>
   findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<Product[]>

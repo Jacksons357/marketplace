@@ -10,3 +10,7 @@ dist
 .vscode
 coverage
 README.md
+Dockerfile
+docker-compose.yml
+docker-entrypoint.sh
+*.log

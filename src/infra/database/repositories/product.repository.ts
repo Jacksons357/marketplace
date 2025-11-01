@@ -143,7 +143,6 @@ export class ProductRepository implements IProductRepository {
   }
 
   async search(filters: AiParsedFilters): Promise<Product[]> {
-    console.log('filters', filters)
     const {
       search,
       category,

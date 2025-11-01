@@ -9,11 +9,7 @@ export class ProductAiSearchUseCase {
 
   async execute(params: ListProductFilters) {
     const { search = '', page, limit } = params
-
-    // Processa a query através da IA
     const filters: AiParsedFilters = await this.aiService.parseQuery(search, { page, limit })
-    
-    // Busca produtos com os filtros processados
     const products = await this.productRepository.search(filters)
 
     return {

@@ -1,5 +1,5 @@
 import { AiParsedFilters } from "../../domain/repositories/IProductRepository"
-import { openAiClient } from "../../infra/openai/client"
+import client from "../../infra/openai/client"
 
 export class AiProductSearchService {
   async parseQuery(query: string, options: { page?: number, limit?: number}): Promise<AiParsedFilters> {
@@ -21,13 +21,13 @@ export class AiProductSearchService {
     `
 
     try {
-      const response = await openAiClient.chat.completions.create({
+      const response = await client.chat({
         model: 'gpt-4',
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0
+        stream: false
       })
 
-      const parsed = JSON.parse(response.choices[0].message.content || '{}')
+      const parsed = JSON.parse(response.message.content)
 
       return {
         category: parsed.category || undefined,

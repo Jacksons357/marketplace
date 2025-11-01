@@ -118,9 +118,7 @@ export class ProductRepository implements IProductRepository {
       priceMax,
       search,
     } = filters || {}
-
     const skip = (page - 1) * limit
-
     const products = await prisma.product.findMany({
       where: {
         ...(category ? { category } : {}),
@@ -140,7 +138,7 @@ export class ProductRepository implements IProductRepository {
       take: limit,
       orderBy: { createdAt: 'desc' }
     })
-
+    
     return products.map(mapPrismaProductToEntity)
   }
 }

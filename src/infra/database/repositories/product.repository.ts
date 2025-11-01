@@ -1,6 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { Product } from "../../../domain/entities/Product";
-import { IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
+import { AiParsedFilters, IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
 import { prisma } from "../prisma/client";
 
 function mapPrismaProductToEntity(prismaProduct: any): Product {
@@ -133,6 +133,47 @@ export class ProductRepository implements IProductRepository {
               ]
             }
           : {})
+      },
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    return products.map(mapPrismaProductToEntity)
+  }
+
+  async search(filters: AiParsedFilters): Promise<Product[]> {
+    console.log('filters', filters)
+    const {
+      search,
+      category,
+      priceMin,
+      priceMax,
+      page = 1,
+      limit = 10
+    } = filters
+
+    const skip = (page - 1) * limit
+
+    const products = await prisma.product.findMany({
+      where: {
+        AND: [
+          ...(priceMin || priceMax
+            ? [{ price: { ...(priceMin ? { gte: priceMin } : {}), ...(priceMax ? { lte: priceMax } : {}) } }]
+            : []),
+          search
+            ? {
+                OR: [
+                  { name: { contains: search, mode: 'insensitive' } },
+                  { description: { contains: search, mode: 'insensitive' } },
+                  { category: { contains: search, mode: 'insensitive' } },
+                ]
+              }
+            : {},
+          category && category !== search
+            ? { category: { contains: category, mode: 'insensitive' } }
+            : {},
+        ]
       },
       skip,
       take: limit,

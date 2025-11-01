@@ -1,5 +1,6 @@
 import { AiParsedFilters } from "../../domain/repositories/IProductRepository"
 import client from "../../infra/openai/client"
+import { normalizeText } from "../../utils/format-texts";
 
 export class AiProductSearchService {
   async parseQuery(query: string, options: { page?: number; limit?: number } = {}): Promise<AiParsedFilters> {
@@ -12,6 +13,7 @@ export class AiProductSearchService {
       }
     }
 
+    const cleanQuery = normalizeText(query)
     const prompt = `
       Você é um assistente que converte pesquisas de usuários em filtros de produtos.
       Analise o texto e extraia:
@@ -26,7 +28,7 @@ export class AiProductSearchService {
       Exemplo de saída:
       { "category": "doces", "priceMin": null, "priceMax": 50, "search": "doces" }
 
-      Texto do usuário: "${query}"
+      Texto do usuário: "${cleanQuery}"
     `.trim()
 
     try {

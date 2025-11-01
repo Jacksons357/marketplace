@@ -9,6 +9,7 @@
     "start": "node dist/server.js",
     "docker:migrate": "docker exec -it marketplace_api npx prisma migrate dev --schema src/infra/database/prisma/schema.prisma",
     "docker:seed": "docker exec -it marketplace_api npx prisma db seed --schema src/infra/database/prisma/schema.prisma",
+    "docker:restart": "docker compose down && docker compose up --build -d",
     "prisma:migrate": "npx prisma migrate deploy --schema src/infra/database/prisma/schema.prisma"
   },
   "prisma": {
@@ -23,6 +24,7 @@
     "dotenv": "^17.2.3",
     "fastify": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
+    "ollama": "^0.6.2",
     "openai": "^6.7.0",
     "zod": "^4.1.12"
   },

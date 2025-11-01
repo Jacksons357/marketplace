@@ -1,5 +1,10 @@
-import OpenAI from "openai";
+import { Ollama } from "ollama";
 
-export const openAiClient = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+const client = new Ollama({
+  host: "https://ollama.com",
+  headers: {
+    Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`
+  },
+});
+
+export default client;

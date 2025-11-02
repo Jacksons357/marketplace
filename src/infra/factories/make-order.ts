@@ -3,7 +3,7 @@ import { OrderUseCase } from "../../domain/use-cases/order.usecase";
 import { OrderRepository } from "../database/repositories/order.repository";
 import { OrganizationRepository } from "../database/repositories/organization-repository";
 import { ProductRepository } from "../database/repositories/product.repository";
-import { UserRepository } from "../database/repositories/user-repository";
+import { UserRepository } from "../database/repositories/user.repository";
 
 export function makeOrderController() {
   const orderRepository = new OrderRepository()

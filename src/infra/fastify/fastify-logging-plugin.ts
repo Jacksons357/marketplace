@@ -8,28 +8,29 @@ interface Options {
   logsService: LogsService;
 }
 
-export default fp(async function (fastify: FastifyInstance, opts: Options) {
-  const { logsService } = opts
+export default fp(async function fastifyLoggingPlugin(
+  fastify: FastifyInstance,
+  opts: Options
+) {
+  const { logsService } = opts;
 
-  fastify.addHook('onRequest', async (req: FastifyRequest, reply: FastifyReply) => {
+  fastify.addHook('onRequest', async (req: FastifyRequest) => {
     (req as any).__startTime = Date.now();
   });
 
   fastify.addHook('onResponse', async (req: FastifyRequest, reply: FastifyReply) => {
     try {
       const path = req.routeOptions?.url || req.url;
-
       const start = (req as any).__startTime || Date.now();
       const latencyMs = Date.now() - start;
 
       const user = (req as any).user || null;
       const log: LogCreateDTO = {
-        userId: user?.id ?? null,
-        organizationId: user?.organizationId ?? null,
+        userId: user?.sub ?? null,
         route: path,
-        method: (req as any).method,
-        status: (reply as any).statusCode ?? 0,
-        latencyMs: latencyMs,
+        method: req.method,
+        status: reply.statusCode ?? 0,
+        latencyMs,
         payload: {
           query: req.query,
           bodyPreview: previewBody((req as any).body),
@@ -39,10 +40,16 @@ export default fp(async function (fastify: FastifyInstance, opts: Options) {
         },
       };
 
-      logsService.enqueue(log);
+      await logsService.enqueue({
+        ...log,
+        userId: user?.sub ?? null,
+      })
+
     } catch (error) {
       if (error instanceof AppError) {
-        fastify.log.error(error)
+        fastify.log.error(error);
+      } else {
+        fastify.log.error(error);
       }
     }
   });

@@ -3,7 +3,7 @@ import { AuthAdminController } from "../../application/controllers/auth-admin-co
 import { OrganizationRepository } from "../database/repositories/organization-repository";
 import { TokenService } from "../../application/services/token.service";
 import { AuthAdminService } from "../../application/services/auth-admin.service";
-import { UserRepository } from "../database/repositories/user-repository";
+import { UserRepository } from "../database/repositories/user.repository";
 
 export function makeAdminController() {
   const organizationRepository = new OrganizationRepository();

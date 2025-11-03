@@ -12,7 +12,7 @@ export class TokenService {
     return jwt.sign(
       payload,
       process.env.JWT_SECRET as string,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
   }
 }

@@ -2,7 +2,7 @@ import { AuthController } from "../../application/controllers/auth.controller";
 import { AuthService } from "../../application/services/auth.service"
 import { TokenService } from "../../application/services/token.service";
 import { LoginUserUseCase } from "../../domain/use-cases/user-login.usecase";
-import { UserRepository } from "../database/repositories/user-repository";
+import { UserRepository } from "../database/repositories/user.repository";
 
 export function makeAuthController() {
   const userRepository = new UserRepository();

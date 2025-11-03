@@ -96,3 +96,14 @@ model Log {
   payload        Json?
   createdAt      DateTime  @default(now())
 }
+
+model AiSearchLog {
+  id             String    @id @default(uuid())
+  userId         String?
+  organizationId String?
+  query          String
+  filters        Json
+  success        Boolean
+  fallbackApplied Boolean
+  createdAt      DateTime  @default(now())
+}

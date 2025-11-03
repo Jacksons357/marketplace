@@ -1,5 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
-import { UserRepository } from "../../infra/database/repositories/user-repository";
+import { UserRepository } from "../../infra/database/repositories/user.repository";
 import { LoginUserDTO } from "../dtos/LoginUserDTO";
 import { LoginUserUseCase } from "../../domain/use-cases/user-login.usecase";
 import { TokenService } from "./token.service";

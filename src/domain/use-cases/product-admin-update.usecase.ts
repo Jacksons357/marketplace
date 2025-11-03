@@ -1,7 +1,6 @@
-import { ProductUpdateDTO } from "../../application/dtos/ProductUpdateDTO";
 import { AppError } from "../../shared/errors/app-error";
-import { OrganizationNotFoundError } from "../../shared/errors/organization-not-found";
 import { ProductNotFoundError } from "../../shared/errors/product-not-found";
+import { UserNotBelongOrganizationError } from "../../shared/errors/user-not-belong-organization";
 import { UserNotFoundError } from "../../shared/errors/user-not-found";
 import { Product } from "../entities/Product";
 import { IProductRepository, ProductUpdateParams } from "../repositories/IProductRepository";
@@ -20,7 +19,7 @@ export class ProductAdminUpdateUseCase {
       throw new UserNotFoundError()
     }
     if (!user.organizationId){
-      throw new OrganizationNotFoundError()
+      throw new UserNotBelongOrganizationError()
     }
 
     const product = await this.productRepository.findById(productId)

@@ -5,7 +5,7 @@ import { ProductCreateDTO } from "../../application/dtos/ProductCreateDTO";
 import { IUserRepository } from "../repositories/IUserRepository";
 import { UserNotFoundError } from "../../shared/errors/user-not-found";
 import { AppError } from "../../shared/errors/app-error";
-import { OrganizationNotFoundError } from "../../shared/errors/organization-not-found";
+import { UserNotBelongOrganizationError } from "../../shared/errors/user-not-belong-organization";
 
 export class ProductAdminCreateUseCase {
   constructor(
@@ -19,7 +19,7 @@ export class ProductAdminCreateUseCase {
       throw new UserNotFoundError()
     }
     if (!user.organizationId){
-      throw new OrganizationNotFoundError()
+      throw new UserNotBelongOrganizationError()
     }
 
     const product = new Product(

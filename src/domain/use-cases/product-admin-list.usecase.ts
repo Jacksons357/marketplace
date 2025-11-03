@@ -1,4 +1,4 @@
-import { OrganizationNotFoundError } from "../../shared/errors/organization-not-found"
+import { UserNotBelongOrganizationError } from "../../shared/errors/user-not-belong-organization"
 import { UserNotFoundError } from "../../shared/errors/user-not-found"
 import { IProductRepository, ListProductFilters } from "../repositories/IProductRepository"
 import { IUserRepository } from "../repositories/IUserRepository"
@@ -17,7 +17,7 @@ export class ProductAdminListUseCase {
 
     const organizationId = user.organizationId
     if (!organizationId) {
-      throw new OrganizationNotFoundError()
+      throw new UserNotBelongOrganizationError()
     }
 
     const products = await this.productRepository.findByOrganization(organizationId, filters)

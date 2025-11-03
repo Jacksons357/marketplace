@@ -1,10 +1,27 @@
+import { Decimal } from "@prisma/client/runtime/library";
 import { Product } from "../../../domain/entities/Product";
-import { IProductRepository, ListProductFilters, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
+import { IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
 import { prisma } from "../prisma/client";
+
+function mapPrismaProductToEntity(prismaProduct: any): Product {
+  return new Product(
+    prismaProduct.id,
+    prismaProduct.organizationId,
+    prismaProduct.name,
+    prismaProduct.description,
+    prismaProduct.price instanceof Decimal ? prismaProduct.price.toNumber() : prismaProduct.price,
+    prismaProduct.category,
+    prismaProduct.imageUrl,
+    prismaProduct.stockQty,
+    prismaProduct.weightGrams,
+    prismaProduct.createdAt,
+    prismaProduct.updatedAt,
+  );
+}
 
 export class ProductRepository implements IProductRepository {
   async create(product: Product): Promise<Product> {
-    return await prisma.product.create({
+    const created  = await prisma.product.create({
       data: {
         id: product.id,
         organizationId: product.organizationId,
@@ -17,6 +34,8 @@ export class ProductRepository implements IProductRepository {
         weightGrams: product.weightGrams,
       },
     });
+
+    return mapPrismaProductToEntity(created)
   }
 
   async findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<Product[]> {
@@ -31,7 +50,7 @@ export class ProductRepository implements IProductRepository {
 
     const skip = (page - 1) * limit
 
-    return prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: {
         organizationId,
         ...(category ? { category } : {}),
@@ -51,19 +70,23 @@ export class ProductRepository implements IProductRepository {
       take: limit,
       orderBy: { createdAt: 'desc' }
     })
+    
+    return products.map(mapPrismaProductToEntity)
   }
 
   async findById(productId: string): Promise<Product | null> {
-    return await prisma.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: {
         id: productId,
       }
     })
+
+    return product ? mapPrismaProductToEntity(product) : null
   }
 
   async update(params: ProductAdminUpdateParams): Promise<Product> {
     const { productId, data } = params
-    return await prisma.product.update({
+    const updated = await prisma.product.update({
       where: {
         id: productId,
       },
@@ -71,5 +94,91 @@ export class ProductRepository implements IProductRepository {
         ...data,
       }
     })
+
+    return mapPrismaProductToEntity(updated)
+  }
+
+  async delete(params: ProductAdminDeleteParams): Promise<Product> {
+    const deleted = await prisma.product.delete({
+      where: {
+        id: params.productId,
+        organizationId: params.organizationId,
+      }
+    })
+
+    return mapPrismaProductToEntity(deleted)
+  }
+
+  async list(filters?: ListProductFilters): Promise<Product[]> {
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      priceMin,
+      priceMax,
+      search,
+    } = filters || {}
+    const skip = (page - 1) * limit
+    const products = await prisma.product.findMany({
+      where: {
+        ...(category ? { category } : {}),
+        ...(priceMin || priceMax
+          ? { price: { ...(priceMin ? { gte: priceMin } : {}), ...(priceMax ? { lte: priceMax } : {}) } }
+          : {}),
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } }
+              ]
+            }
+          : {})
+      },
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    return products.map(mapPrismaProductToEntity)
+  }
+
+  async search(filters: ListProductFilters): Promise<Product[]> {
+    const {
+      search,
+      category,
+      priceMin,
+      priceMax,
+      page = 1,
+      limit = 10
+    } = filters
+
+    const skip = (page - 1) * limit
+
+    const products = await prisma.product.findMany({
+      where: {
+        AND: [
+          ...(priceMin || priceMax
+            ? [{ price: { ...(priceMin ? { gte: priceMin } : {}), ...(priceMax ? { lte: priceMax } : {}) } }]
+            : []),
+          search
+            ? {
+                OR: [
+                  { name: { contains: search, mode: 'insensitive' } },
+                  { description: { contains: search, mode: 'insensitive' } },
+                  { category: { contains: search, mode: 'insensitive' } },
+                ]
+              }
+            : {},
+          category && category !== search
+            ? { category: { contains: category, mode: 'insensitive' } }
+            : {},
+        ]
+      },
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    return products.map(mapPrismaProductToEntity)
   }
 }

@@ -1,5 +1,5 @@
 import { AiProductSearchService } from "../../application/services/ai-product-search.service";
-import { AiParsedFilters, IProductRepository, ListProductFilters } from "../repositories/IProductRepository";
+import { IProductRepository, ListProductFilters } from "../repositories/IProductRepository";
 
 export class ProductAiSearchUseCase {
   constructor(
@@ -7,9 +7,12 @@ export class ProductAiSearchUseCase {
     private aiService: AiProductSearchService,
   ) {}
 
-  async execute(params: ListProductFilters) {
+  async execute(
+    params: ListProductFilters,
+    userId?: string
+  ) {
     const { search = '', page, limit } = params
-    const filters: AiParsedFilters = await this.aiService.parseQuery(search, { page, limit })
+    const filters = await this.aiService.parseQuery(search, { page, limit }, userId)
     const products = await this.productRepository.search(filters)
 
     return {

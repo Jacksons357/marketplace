@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { makeProductListController } from "../../factories/make-product-list";
 import { makeProductAiSearchController } from "../../factories/make-product-ai-search";
 import { productListQuerySchemaDocs } from "../../../presentation/docs/swagger";
+import { optionalAuth } from "../middlewares/optional.middleware";
 
 export function productRoutes(app: FastifyInstance) {
   const productListController = makeProductListController()
@@ -17,6 +18,7 @@ export function productRoutes(app: FastifyInstance) {
   }, async (req: FastifyRequest, res: FastifyReply) => productListController.list(req, res))
 
   app.get('/ai', {
+    preHandler: optionalAuth,
     schema: {
       tags: ['Products'],
       summary: 'AI Search Products',

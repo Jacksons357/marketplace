@@ -1,9 +1,21 @@
-import { AiParsedFilters } from "../../domain/repositories/IProductRepository"
+import { AiParsedFilters } from "../../domain/repositories/IAiSearchLogRepository";
+import { ListProductFilters } from "../../domain/repositories/IProductRepository"
+import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import client from "../../infra/openai/client"
 import { normalizeText } from "../../utils/format-texts";
+import { AiSearchLogService } from "./ai-product-search-log.service";
 
-export class AiProductSearchService {
-  async parseQuery(query: string, options: { page?: number; limit?: number } = {}): Promise<AiParsedFilters> {
+export class AiProductSearchService { 
+  constructor(
+    private aiSearchLogService: AiSearchLogService,
+    private userRepository: IUserRepository,
+  ){}
+
+  async parseQuery(
+    query: string, 
+    options: { page?: number; limit?: number } = {},
+    userId?: string
+  ): Promise<ListProductFilters> {
     if (!query.trim()) {
       return {
         search: query,
@@ -52,16 +64,43 @@ export class AiProductSearchService {
         interpretation: this.generateInterpretation(parsed)
       }
 
+      const currentUser = await this.userRepository.findById(userId || '')
+      await this.aiSearchLogService.createLog({
+        type: 'AI_SEARCH',
+        metadata: {
+          query: cleanQuery,
+          filters,
+          success: true,
+          fallbackApplied: false
+        },
+        userId: currentUser?.id,
+        organizationId: currentUser?.organizationId
+      })
+
       return filters
 
     } catch (error) {
       console.error('Erro na análise por IA:', error)
-      return {
+      const fallbackFilters: AiParsedFilters = {
         search: query,
         page: options.page,
         limit: options.limit,
         interpretation: `Busca simples por "${query}"`
       }
+      const currentUser = await this.userRepository.findById(userId || '')
+      await this.aiSearchLogService.createLog({
+        type: 'AI_SEARCH',
+        metadata: {
+          query: cleanQuery,
+          filters: fallbackFilters,
+          success: false,
+          fallbackApplied: true
+        },
+        userId: currentUser?.id,
+        organizationId: currentUser?.organizationId
+      })
+
+      return fallbackFilters
     }
   }
 

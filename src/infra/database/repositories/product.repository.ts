@@ -1,6 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { Product } from "../../../domain/entities/Product";
-import { AiParsedFilters, IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
+import { IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../../domain/repositories/IProductRepository";
 import { prisma } from "../prisma/client";
 
 function mapPrismaProductToEntity(prismaProduct: any): Product {
@@ -142,7 +142,7 @@ export class ProductRepository implements IProductRepository {
     return products.map(mapPrismaProductToEntity)
   }
 
-  async search(filters: AiParsedFilters): Promise<Product[]> {
+  async search(filters: ListProductFilters): Promise<Product[]> {
     const {
       search,
       category,

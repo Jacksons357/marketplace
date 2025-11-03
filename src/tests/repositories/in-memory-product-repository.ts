@@ -1,5 +1,5 @@
 import { Product } from "../../domain/entities/Product"
-import { AiParsedFilters, IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../domain/repositories/IProductRepository"
+import { IProductRepository, ListProductFilters, ProductAdminDeleteParams, ProductAdminUpdateParams } from "../../domain/repositories/IProductRepository"
 
 export class InMemoryProductRepository implements IProductRepository {
   private items: Product[] = []
@@ -57,7 +57,7 @@ export class InMemoryProductRepository implements IProductRepository {
     this.items = []
   }
 
-  async search(filters: AiParsedFilters): Promise<Product[]> {
+  async search(filters: ListProductFilters): Promise<Product[]> {
     const products = await this.list(filters)
     return products
   }

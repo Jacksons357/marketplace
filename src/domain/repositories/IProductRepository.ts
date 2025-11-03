@@ -1,15 +1,6 @@
 import { ProductUpdateDTO } from "../../application/dtos/ProductUpdateDTO";
 import { Product } from "../entities/Product";
 
-export interface ListProductFilters {
-  page?: number
-  limit?: number
-  category?: string
-  priceMin?: number
-  priceMax?: number
-  search?: string
-}
-
 export interface ProductUpdateParams {
   userId: string
   productId: string
@@ -26,7 +17,13 @@ export interface ProductAdminDeleteParams {
   organizationId: string
 }
 
-export interface AiParsedFilters extends ListProductFilters {
+export interface ListProductFilters {
+  category?: string
+  priceMin?: number
+  priceMax?: number
+  search: string
+  page?: number
+  limit?: number
   interpretation?: string
 }
 
@@ -37,5 +34,5 @@ export interface IProductRepository {
   update(params: ProductAdminUpdateParams): Promise<Product>
   delete(params: ProductAdminDeleteParams): Promise<Product>
   list(filters?: ListProductFilters): Promise<Product[]>
-  search(filters: AiParsedFilters): Promise<Product[]>
+  search(filters: ListProductFilters): Promise<Product[]>
 }

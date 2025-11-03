@@ -9,6 +9,7 @@ export function productRoutes(app: FastifyInstance) {
   const productAiSearchController = makeProductAiSearchController()
 
   app.get('/', {
+    preHandler: optionalAuth,
     schema: {
       tags: ['Products'],
       summary: 'List Products',

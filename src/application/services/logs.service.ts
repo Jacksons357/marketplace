@@ -21,8 +21,6 @@ export class LogsService {
       const userEntity = await this.userRepository.findById(log.userId);
       organizationId = userEntity?.organizationId ?? null;
     }
-
-    this.queue.push(log)
     const logToQueue: LogCreateDTO = {
       ...log,
       organizationId,

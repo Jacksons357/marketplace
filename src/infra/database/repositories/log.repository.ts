@@ -24,4 +24,24 @@ export class LogRepository implements ILogRepository {
       createdAt: record.createdAt,
     })
   }
+
+  async findRecent(limit = 50): Promise<Log[]> {
+    const records = await prisma.log.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: limit,
+    })
+    return records.map(record => new Log({
+      id: record.id,
+      userId: record.userId,
+      organizationId: record.organizationId,
+      route: record.route,
+      method: record.method,
+      status: record.status,
+      latencyMs: record.latencyMs,
+      payload: record.payload as Record<string, unknown> | null,
+      createdAt: record.createdAt,
+    }))
+  }
 }

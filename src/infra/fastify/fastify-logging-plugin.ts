@@ -6,13 +6,14 @@ import { AppError } from '../../shared/errors/app-error';
 
 interface Options {
   logsService: LogsService;
+  exclude?: string[];
 }
 
 export default fp(async function fastifyLoggingPlugin(
   fastify: FastifyInstance,
   opts: Options
 ) {
-  const { logsService } = opts;
+  const { logsService, exclude = ['/logs', '/docs'] } = opts;
 
   fastify.addHook('onRequest', async (req: FastifyRequest) => {
     (req as any).__startTime = Date.now();
@@ -21,6 +22,7 @@ export default fp(async function fastifyLoggingPlugin(
   fastify.addHook('onResponse', async (req: FastifyRequest, reply: FastifyReply) => {
     try {
       const path = req.routeOptions?.url || req.url;
+      if (exclude.some(e => path.startsWith(e))) return;
       const start = (req as any).__startTime || Date.now();
       const latencyMs = Date.now() - start;
 

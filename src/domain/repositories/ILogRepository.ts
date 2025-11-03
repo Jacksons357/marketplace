@@ -13,4 +13,5 @@ export interface LogCreateParams {
 
 export interface ILogRepository {
   create(log: LogCreateParams): Promise<Log>;
+  findRecent(): Promise<Log[]>;
 }

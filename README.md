@@ -1,90 +1,90 @@
-# Marketplace Multi-ONG
+# Marketplace Backend
 
-Uma API para gerenciamento de marketplace com suporte a múltiplas ONGs.
+Este é o projeto Marketplace, desenvolvido com Node.js, TypeScript, Prisma e PostgreSQL.
 
-Principios: SOLID, DDD, Clean code e Clean architecture.
+## Pré-requisitos
 
----
+- [Yarn](https://yarnpkg.com/getting-started/install)
+- [Node version: 20](https://nodejs.org/en/download/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-## 🚀 Instalação
+## Configuração do Ambiente
 
-Clone o repositório:
-
+1. Clone o repositório:
 ```bash
-git clone https://github.com/Jacksons357/marketplace-backend.git
-cd marketplace-backend
+git clone https://github.com/Jacksons357/marketplace.git
+cd marketplace
 ```
 
-Instale as dependências:
-
+2. Instale as dependências:
 ```bash
+cd backend
 yarn install
 ```
 
-Crie um arquivo `.env` a partir do exemplo:
-
+3. Copie o arquivo de exemplo de variáveis de ambiente:
 ```bash
+cd backend
 cp .env.example .env
 ```
 
-Inicie o banco de dados e a aplicação:
+4. Configure as variáveis de ambiente no arquivo `.env` conforme necessário. Os valores padrão já estão configurados para desenvolvimento local.
 
+## Executando o Projeto
+
+1. Na pasta raiz do projeto, execute:
 ```bash
-docker-compose up --build -d
+docker-compose up
 ```
 
-Acesse a documentação da API em [http://localhost:3333/docs](http://localhost:3333/docs).
+Isso irá:
+- Iniciar o banco de dados PostgreSQL
+- Executar as migrações do Prisma
+- Iniciar a aplicação em modo de desenvolvimento
+- Iniciar o Prisma Studio para gerenciamento do banco de dados
 
-Rode os seeds para popular o banco de dados:
+## Comandos Úteis
 
+- **Executar os seeds**:
+Dentro de /backend rode:
 ```bash
 yarn docker:seed
 ```
 
----
+## Serviços Disponíveis
 
-## 📁 Estrutura do Projeto
+- **API Backend**: http://localhost:3333
+- **Prisma Studio**: http://localhost:5555
+- **Banco de Dados**: localhost:5432
+
+## Estrutura do Projeto
 
 ```
-marketplace-backend/
+backend/
 ├── src/
-│   ├── application/
-│   │   ├── controllers/
-│   │   ├── dtos/
-│   │   └── services/
-│   ├── domain/
-│   │   ├── entities/
-│   │   ├── repositories/
-│   │   └── use-cases/
-│   ├── infra/
-│   │   ├── database/
-│   │   │   ├── prisma/
-│   │   │   └── repositories/
-│   │   ├── factories/
-│   │   └── http/
-│   │   │   ├── middlewares/
-│   │   │   └── routes/
-│   ├── presentation/
-│   │   └── docs/
-│   ├── shared/
-│   │   └── errors/
-│   ├── tests/
-│   │   ├── repositories/
-│   │   └── use-cases/
-│   ├── types/
-│   ├── utils/
-│   ├── app.ts
-│   ├── server.ts
-├── .dockerignore
-├── .env.example
-├── .gitignore
-├── Dockerfile
-├── README.md
-├── docker-compose.yml
-├── docker-entrypoint.sh
-├── package.json
-├── tsconfig.json
-└── yarn.lock
+│   ├── application/    # Casos de uso da aplicação
+│   ├── domain/        # Entidades e regras de negócio
+│   ├── infra/         # Implementações de infraestrutura
+│   ├── presentation/  # Controllers e rotas
+│   └── shared/        # Recursos compartilhados
 ```
 
----
+## Desenvolvimento
+
+- O código fonte é automaticamente sincronizado com o container Docker
+- As alterações no código são recarregadas automaticamente
+- O Prisma Studio permite visualizar e editar dados do banco
+
+## Troubleshooting
+
+Se encontrar problemas:
+
+1. Verifique se todas as portas necessárias estão disponíveis
+2. Certifique-se de que o Docker está rodando
+3. Tente reconstruir os containers:
+```bash
+docker-compose down
+docker-compose build --no-cache
+docker-compose up
+```

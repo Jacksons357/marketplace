@@ -34,4 +34,28 @@ export class AiSearchLogRepository implements IAiSearchLogRepository {
       return null
     }
   }
+
+  async findRecent(limit = 50): Promise<AiSearchLog[]> {
+    try {
+      const records = await prisma.aiSearchLog.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: limit,
+      })
+      return records.map(record => AiSearchLog.create({
+        id: record.id,
+        userId: record.userId,
+        organizationId: record.organizationId,
+        query: record.query,
+        filters: record.filters,
+        success: record.success,
+        fallbackApplied: record.fallbackApplied,
+        createdAt: record.createdAt
+      }))
+    } catch (error) {
+      console.error('Erro ao buscar logs AI_SEARCH recentes no DB:', error)
+      return []
+    }
+  }
 }

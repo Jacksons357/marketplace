@@ -1,3 +1,5 @@
+import { axiosPublicAPI } from "@/lib/axios/axios-server";
+import axios from "axios";
 import NextAuth, { AuthOptions } from "next-auth"
 import { AdapterUser } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -25,24 +27,11 @@ const authOptions: AuthOptions = {
         }
 
         try {
-          const response = await fetch(`${process.env.API_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
+          const response = await axios.post(`${process.env.API_URL}/auth/login`, {
+            email: credentials.email,
+            password: credentials.password,
           })
-
-          if (!response.ok) {
-            console.error('API response error:', response.status, await response.text())
-            return null
-          }
-
-          const data = await response.json()
+          const data = response.data
 
           if (!data.user || !data.access_token) {
             console.error('Invalid API response format:', data)

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { Separator } from '@/components/ui/separator'
+import { toast } from 'sonner'
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Deve ter pelo menos 3 caracteres'),
@@ -63,8 +64,10 @@ export default function RegisterPage() {
       })
 
       if (result?.error) {
-        throw new Error('Failed to sign in after registration')
+        toast.error('Erro ao registrar.')
+        return
       }
+      toast.success('Registro realizado com sucesso!')
 
       router.push('/')
       router.refresh()

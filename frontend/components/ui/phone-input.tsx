@@ -1,6 +1,6 @@
 "use client";
 
-import { maskPhone } from "@/lib/utils/masks";
+import { maskPhone } from "@/utils/masks";
 import { ChangeEvent } from "react";
 
 interface PhoneInputProps {

@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
+import { toast } from 'sonner'
 
 const loginSchema = z.object({
   email: z.email('Deve ser um email válido'),
@@ -47,9 +48,10 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setGeneralError('Invalid email or password')
+        toast.error('Email ou senha inválidos.')
         return
       }
+      toast.success('Login realizado com sucesso!')
 
       router.push('/')
       router.refresh()

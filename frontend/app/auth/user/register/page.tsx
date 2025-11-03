@@ -12,6 +12,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PhoneInput } from '@/components/ui/phone-input'
+import { toast } from 'sonner'
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -50,7 +51,8 @@ export default function RegisterPage() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || 'Registration failed')
+        toast.error(errorData.message || 'Erro ao registrar.')
+        return
       }
 
       const result = await signIn('credentials', {
@@ -62,6 +64,7 @@ export default function RegisterPage() {
       if (result?.error) {
         throw new Error('Failed to sign in after registration')
       }
+      toast.success('Registro realizado com sucesso!')
 
       router.push('/')
       router.refresh()

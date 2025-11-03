@@ -3,7 +3,6 @@ import { withAuth } from "next-auth/middleware"
 export default withAuth({
   pages: {
     signIn: "/auth/user/login",
-    newUser: "/auth/user/register",
   },
 })
 
@@ -17,6 +16,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - auth/login (login page)
      */
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|auth/user/login|auth/user/register).*)",
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|auth/user/login|auth/user/register|auth/admin/register).*)",
   ],
 }

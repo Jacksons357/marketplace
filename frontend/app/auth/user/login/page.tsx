@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 
 const loginSchema = z.object({
-  email: z.string().email('Valid email is required'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.email('Deve ser um email válido'),
+  password: z.string().min(1, 'A senha é obrigatória'),
 })
 
 type LoginFormData = z.infer<typeof loginSchema>
@@ -23,7 +23,7 @@ export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [generalError, setGeneralError] = useState<string | null>(
-    searchParams.get('error') ? 'Invalid credentials. Please try again.' : null
+    searchParams.get('error') ? 'Email ou senha inválidos. Por favor, tente novamente.' : null
   )
   const [loading, setLoading] = useState(false)
 
@@ -83,6 +83,9 @@ export default function LoginPage() {
               required
               disabled={loading}
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+            )}
           </div>
 
           <div>
@@ -92,9 +95,14 @@ export default function LoginPage() {
             <Input
               {...register('password')}
               id="password"
+              type='password'
+              
               required
               disabled={loading}
             />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+            )}
           </div>
 
           <Button

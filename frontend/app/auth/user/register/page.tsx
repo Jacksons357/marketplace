@@ -11,14 +11,15 @@ import Link from 'next/link'
 import { Spinner } from '@/components/ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PhoneInput } from '@/components/ui/phone-input'
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().email('Valid email is required'),
-  phone: z
-    .string()
-    .regex(/^\d{10,11}$/, 'Valid phone number is required (10-11 digits)'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.email('Valid email is required'),
+  phone: z.string()
+    .min(14, 'Telefone deve ter pelo menos 10 dígitos')
+    .transform((val) => val.replace(/\D/g, '')),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
 type RegisterFormData = z.infer<typeof registerSchema>
@@ -127,17 +128,11 @@ export default function RegisterPage() {
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
               Telefone
             </label>
-            <Input
-              type="tel"
-              id="phone"
-              {...register('phone')}
-              placeholder='9876543210'
-              required
-              disabled={loading}
+            <PhoneInput
+              register={register}
+              name="phone"
+              error={errors.phone?.message}
             />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>
-            )}
           </div>
 
           <div>

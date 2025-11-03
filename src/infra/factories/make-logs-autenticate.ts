@@ -2,7 +2,7 @@ import { LogAuthenticateController } from "../../application/controllers/log-aut
 import { LogAuthenticateUseCase } from "../../domain/use-cases/log-authenticate.usecase";
 import { LogRepository } from "../database/repositories/log.repository";
 
-export function makeLogsAuthenticateMiddleware(){
+export function makeLogAuthenticateController(){
   const logRepository = new LogRepository()
   const logAuthenticateUseCase = new LogAuthenticateUseCase(logRepository)
   return new LogAuthenticateController(logAuthenticateUseCase)

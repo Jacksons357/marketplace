@@ -26,4 +26,5 @@ export interface AiSearchLogParams {
 
 export interface IAiSearchLogRepository {
   create(log: AiSearchLogParams): Promise<AiSearchLog | null>
+  findRecent(limit?: number): Promise<AiSearchLog[]>
 }

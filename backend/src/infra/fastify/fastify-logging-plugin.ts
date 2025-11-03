@@ -42,6 +42,8 @@ export default fp(async function fastifyLoggingPlugin(
         },
       };
 
+      console.log('[Fastify Logging Plugin] user: ', user);
+
       await logsService.enqueue({
         ...log,
         userId: user?.sub ?? null,

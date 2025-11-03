@@ -15,15 +15,12 @@ export class LogsService {
     setInterval(() => this.flush().catch(console.error), this.flushIntervalMs);
   }
   
-  async enqueue(log: LogCreateParams & { userId?: string }) {
-    let organizationId = log.organizationId ?? null;
-    if (log.userId) {
-      const userEntity = await this.userRepository.findById(log.userId);
-      organizationId = userEntity?.organizationId ?? null;
-    }
+  async enqueue(log: LogCreateParams) {
+    const userEntity = await this.userRepository.findById(log.userId ?? '');
+    const organizationId = userEntity?.organizationId
     const logToQueue: LogCreateDTO = {
       ...log,
-      organizationId,
+      organizationId: organizationId ?? null,
       createdAt: log.createdAt ?? new Date()
     };
 

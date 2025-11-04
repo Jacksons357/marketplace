@@ -7,3 +7,10 @@ export interface CreateOrdersBodyParams {
     priceAtPurchase: number;
   }[];
 }
+
+
+export interface CreateOrderProps {
+  token: string
+  params: CreateOrdersBodyParams
+}
+

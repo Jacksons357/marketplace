@@ -1,11 +1,15 @@
 import { axiosServerAPI } from "@/lib/axios/axios-server";
-import { CreateOrdersBodyParams } from "@/types/order";
-import { AxiosError } from "axios";
+import { CreateOrderProps } from "@/types/order";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
-export async function createOrder(params: CreateOrdersBodyParams) {
+export async function createOrder({ token, params }: CreateOrderProps) {
   try {
-    const response = await axiosServerAPI.post('/orders', params)
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, params, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {

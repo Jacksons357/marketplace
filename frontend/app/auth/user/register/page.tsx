@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -29,6 +29,8 @@ export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [generalError, setGeneralError] = useState('')
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const {
     register,
@@ -66,7 +68,7 @@ export default function RegisterPage() {
       }
       toast.success('Registro realizado com sucesso!')
 
-      router.push('/')
+      router.push(callbackUrl)
       router.refresh()
     } catch (error) {
       setGeneralError(error instanceof Error ? error.message : 'Registration failed')

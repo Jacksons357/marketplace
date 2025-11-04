@@ -77,7 +77,6 @@ function NavbarLinks({
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   if (status === "loading") {
-    // Skeleton enquanto carrega sessão
     return (
       <div className="ml-10 flex items-center space-x-4">
         <Skeleton className="h-8 w-24 rounded-md" />
@@ -86,45 +85,45 @@ function NavbarLinks({
     );
   }
 
-  if (!user) {
-    // Visitante
-    return (
-      <div className="ml-10 flex items-center space-x-4">
-        <NavbarDropdown />
-        <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <Link href="/auth/login">Login</Link>
-        </Button>
-      </div>
-    );
-  }
-
-  // Usuário autenticado
   return (
     <div className="ml-10 flex items-center space-x-4">
-      {user.role === "ADMIN" ? (
-        <Button variant="outline" asChild>
-          <Link href="/dashboard/admin">Painel da ONG</Link>
-        </Button>
-      ) : (
+      {/* Carrinho sempre visível */}
+      <Button variant="ghost" asChild>
+        <Link href="/cart">
+          <ShoppingCart className="w-4 h-4 mr-1" /> Carrinho
+          {totalItems > 0 && (
+            <span className="bg-primary text-white text-xs font-bold rounded-full px-1.5">
+              {totalItems}
+            </span>
+          )}
+        </Link>
+      </Button>
+
+      {/* Links para visitantes */}
+      {!user && (
         <>
-          <Button variant="ghost" asChild>
-            <Link href="/cart">
-              <ShoppingCart className="w-4 h-4 mr-1" /> Carrinho
-              {totalItems > 0 && (
-                <span className=" bg-primary text-white text-xs font-bold rounded-full px-1.5">
-                  {totalItems}
-                </span>
-              )}
-            </Link>
-          </Button>
-          <Button variant="ghost" asChild>
-            <Link href="/orders">
-              <ListCheck className="w-4 h-4 mr-1" /> Pedidos
-            </Link>
+          <NavbarDropdown />
+          <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Link href="/auth/login">Login</Link>
           </Button>
         </>
       )}
-      <UserMenu user={user} />
+
+      {/* Links para usuários logados */}
+      {user && user.role === "ADMIN" && (
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/admin">Painel da ONG</Link>
+        </Button>
+      )}
+      {user && user.role === "USER" && (
+        <Button variant="ghost" asChild>
+          <Link href="/orders">
+            <ListCheck className="w-4 h-4 mr-1" /> Pedidos
+          </Link>
+        </Button>
+      )}
+
+      {user && <UserMenu user={user} />}
     </div>
   );
 }

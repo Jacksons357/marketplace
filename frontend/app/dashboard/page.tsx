@@ -31,7 +31,7 @@ export default async function DashboardPage() {
         <p className="text-sm text-muted-foreground">Bem-vindo, {name}!</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Gerenciar Produtos</CardTitle>
@@ -55,20 +55,6 @@ export default async function DashboardPage() {
             <div className="mt-3">
               <Link href="/dashboard/orders" className="underline">
                 Ir para Pedidos
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Métricas</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Visão de vendas, receita e produtos mais vendidos.
-            <div className="mt-3">
-              <Link href="/dashboard/metrics" className="underline">
-                Ir para Métricas
               </Link>
             </div>
           </CardContent>
@@ -109,9 +95,6 @@ export default async function DashboardPage() {
               </Link>
               <Link href="/dashboard/orders" className="px-3 py-1 rounded-md bg-accent text-accent-foreground">
                 Pedidos
-              </Link>
-              <Link href="/dashboard/metrics" className="px-3 py-1 rounded-md bg-accent text-accent-foreground">
-                Métricas
               </Link>
             </div>
           </CardContent>

@@ -7,6 +7,9 @@ export async function seedUsers(ongs: any[]) {
 
   console.log("🌱 Seeding Users...");
 
+  const org1Id = ongs?.[0]?.id;
+  const org2Id = ongs?.[1]?.id ?? org1Id;
+
   await prisma.user.createMany({
     data: [
       {
@@ -14,14 +17,17 @@ export async function seedUsers(ongs: any[]) {
         email: "admin@email.com",
         role: "ADMIN",
         passwordHash,
+        organizationId: org1Id ?? null,
       },
       {
-        name: "User",
-        email: "user@email.com",
-        role: "USER",
+        name: "Admin 2",
+        email: "admin2@email.com",
+        role: "ADMIN",
         passwordHash,
+        organizationId: org2Id ?? null,
       },
     ],
+    skipDuplicates: true,
   });
 
   console.log("✅ Usuários criados com sucesso!");

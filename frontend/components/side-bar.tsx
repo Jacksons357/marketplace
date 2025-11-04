@@ -6,8 +6,6 @@ export default function Sidebar() {
     { href: "/dashboard", label: "Visão Geral", icon: LayoutDashboard },
     { href: "/dashboard/products", label: "Produtos", icon: Package },
     { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingBag },
-    // { href: "/dashboard/metrics", label: "Métricas", icon: BarChart3 },
-    // { href: "/dashboard/settings", label: "Configurações", icon: Settings },
   ];
 
   return (
@@ -16,7 +14,7 @@ export default function Sidebar() {
         <div className="mb-6">
           <h2 className="text-lg font-semibold">Admin Dashboard</h2>
           <p className="text-xs text-muted-foreground">
-            Gerencie produtos, pedidos e métricas
+            Gerencie produtos e pedidos
           </p>
         </div>
 

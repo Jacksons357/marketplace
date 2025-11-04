@@ -39,7 +39,11 @@ export class OrderUseCase {
         priceAtPurchase: item.priceAtPurchase,
       }))
 
-      const totalPrice = orderItems.reduce((acc, item) => acc + item.quantity * item.priceAtPurchase, 0)
+      const totalPrice = parseFloat(
+        orderItems
+          .reduce((acc, item) => acc + item.quantity * item.priceAtPurchase, 0)
+          .toFixed(2)
+      );
       const order = new Order({
         userId: params.userId,
         organizationId: params.organizationId,

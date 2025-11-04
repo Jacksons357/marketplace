@@ -6,8 +6,8 @@ export default function Sidebar() {
     { href: "/dashboard", label: "Visão Geral", icon: LayoutDashboard },
     { href: "/dashboard/products", label: "Produtos", icon: Package },
     { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingBag },
-    { href: "/dashboard/metrics", label: "Métricas", icon: BarChart3 },
-    { href: "/dashboard/settings", label: "Configurações", icon: Settings },
+    // { href: "/dashboard/metrics", label: "Métricas", icon: BarChart3 },
+    // { href: "/dashboard/settings", label: "Configurações", icon: Settings },
   ];
 
   return (

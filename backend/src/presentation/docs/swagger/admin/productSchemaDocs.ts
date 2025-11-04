@@ -25,7 +25,9 @@ export const productCreateResponseSchemaDocs = {
       category: { type: 'string' },
       imageUrl: { type: 'string' },
       stockQty: { type: 'number' },
-      weightGrams: { type: 'number' }
+      weightGrams: { type: 'number' },
+      createdAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     }
   }
 }
@@ -58,7 +60,9 @@ export const productListResponseSchemaDocs = {
         category: { type: 'string' },
         imageUrl: { type: 'string' },
         stockQty: { type: 'number' },
-        weightGrams: { type: 'number' }
+        weightGrams: { type: 'number' },
+        createdAt: { type: 'string' },
+        updatedAt: { type: 'string' },
       }
     }
   }

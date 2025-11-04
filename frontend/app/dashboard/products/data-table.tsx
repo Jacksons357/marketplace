@@ -24,6 +24,7 @@ import { useState } from "react"
 import { Product } from "@/types/product"
 import { ProductTableProvider } from "./table-context"
 import { useDeleteProduct } from "@/lib/mutations/product"
+import { TableProductSkeleton } from "@/components/skeletons/table-product-skeleton"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -126,7 +127,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Nenhum produto encontrado.
+                  <TableProductSkeleton />
                 </TableCell>
               </TableRow>
             )}

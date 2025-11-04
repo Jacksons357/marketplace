@@ -9,10 +9,35 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Criado em',
+    cell: ({ getValue }) => {
+    const date = new Date(getValue() as string);
+    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${date.getFullYear()}`;
+    },
   },
   {
     accessorKey: 'imageUrl',
     header: 'Imagem',
+    cell: ({ row }) => {
+      const product = row.original
+      const url = product.imageUrl
+      return (
+        <div className="h-12 w-12 overflow-hidden rounded-md bg-muted">
+          {url ? (
+            <img
+              src={url}
+              alt={product.name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full grid place-items-center text-xs text-muted-foreground">
+              —
+            </div>
+          )}
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'name',

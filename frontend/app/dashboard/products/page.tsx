@@ -12,6 +12,8 @@ export default function ProductsPage() {
 
   const { data: products, isLoading } = useGetProductsByUserId(token);
 
+  console.log(products)
+
   return (
     <div className="p-6 space-y-6">
       <div>

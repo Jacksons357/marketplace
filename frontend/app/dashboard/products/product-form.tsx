@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateProduct, useUpdateProduct } from "@/lib/mutations/product";
 import { Spinner } from "@/components/ui/spinner";
+import { uploadImage } from "@/http/upload-image";
+import { toast } from "sonner";
+import { ArchiveIcon } from "lucide-react";
 
 interface ProductFormProps {
   token: string;
@@ -22,7 +25,7 @@ const productSchema = z.object({
   description: z.string().optional(),
   price: z.number().min(0, "Preço deve ser maior ou igual a 0"),
   category: z.string(),
-  imageUrl: z.url("URL inválida"),
+  imageUrl: z.string().optional(),
   stockQty: z.number().min(0, "Estoque deve ser maior ou igual a 0"),
   weightGrams: z.number().min(0, "Peso deve ser maior ou igual a 0"),
 });
@@ -48,6 +51,7 @@ export function ProductForm({ token, product, onSuccess }: ProductFormProps) {
       weightGrams: product?.weightGrams ?? 0,
     },
   })
+  const [file, setFile] = useState<File | null>(null);
   const [priceInput, setPriceInput] = useState(
     product?.price ? (product.price * 100).toString() : ""
   )
@@ -59,16 +63,30 @@ export function ProductForm({ token, product, onSuccess }: ProductFormProps) {
   const { mutateAsync: createMutate } = useCreateProduct();
   const { mutateAsync: updateMutate } = useUpdateProduct();
 
-  const onSubmit = async (data: ProductFormValues) => {
-    if (product?.id) {
-      await updateMutate({ token, productId: product.id, params: data });
-    } else {
-      await createMutate({ token, params: data });
+  const onSubmit = async (data: ProductFormValues) => { 
+    try {
+      let imageUrl = data.imageUrl;
+      if (file) {
+        imageUrl = await uploadImage(file, product?.id || Date.now().toString());
+      }
+
+      const params = { ...data, imageUrl };
+
+      if (product?.id) {
+        await updateMutate({ token, productId: product.id, params });
+      } else {
+        await createMutate({ token, params });
+      }
+
+      onSuccess();
+      reset();
+      setPriceInput("");
+      setFile(null);
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao salvar produto");
     }
-    onSuccess();
-    reset();
-    setPriceInput("");
-  }
+  };
+
 
 
   return (
@@ -122,12 +140,20 @@ export function ProductForm({ token, product, onSuccess }: ProductFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="imageUrl">Imagem (URL)</Label>
-        <Input
-          id="imageUrl"
-          {...register("imageUrl")}
-          placeholder="https://example.com/images/racao-caes-adultos-10kg.jpg"
-        />
+        <Label htmlFor="imageFile">Imagem</Label>
+        <div className="flex items-center">
+          <ArchiveIcon />
+
+          <Input
+            id="imageFile"
+            type="file"
+            accept="image/*"
+            className="hover:cursor-pointer"
+            onChange={(e) => {
+              if (e.target.files?.[0]) setFile(e.target.files[0]);
+            }}
+          />
+        </div>
         {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl.message}</p>}
       </div>
 

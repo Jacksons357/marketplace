@@ -39,6 +39,6 @@ export function useGetProductsByUserId(token: string) {
     queryKey: ['products-by-user-id', token],
     queryFn: () => getProductsByUserId(token),
     enabled: !!token,
-    staleTime: 1000 * 60 * 2
+    staleTime: 1000 * 60 * 2,
   })
 }

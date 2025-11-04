@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateProduct } from "@/lib/mutations/product";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ProductFormProps {
   token: string;
@@ -10,26 +17,145 @@ interface ProductFormProps {
   onSuccess: () => void;
 }
 
-export function ProductForm({ token, product, onSuccess }: ProductFormProps) {
-  const [name, setName] = useState(product?.name || "");
-  const [price, setPrice] = useState(product?.price || "");
+const productSchema = z.object({
+  name: z.string().min(1, "Nome é obrigatório"),
+  description: z.string().optional(),
+  price: z.number().min(0, "Preço deve ser maior ou igual a 0"),
+  category: z.string(),
+  imageUrl: z.url("URL inválida"),
+  stockQty: z.number().min(0, "Estoque deve ser maior ou igual a 0"),
+  weightGrams: z.number().min(0, "Peso deve ser maior ou igual a 0"),
+});
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    console.log(name, price);
+type ProductFormValues = z.infer<typeof productSchema>;
+
+export function ProductForm({ token, product, onSuccess }: ProductFormProps) {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: product?.name || "",
+      description: product?.description || "",
+      price: product?.price,
+      category: product?.category || "",
+      imageUrl: product?.imageUrl || "",
+      stockQty: product?.stockQty ?? 0,
+      weightGrams: product?.weightGrams ?? 0,
+    },
+  })
+  const [priceInput, setPriceInput] = useState(
+    product?.price ? (product.price * 100).toString() : ""
+  )
+  useEffect(() => {
+    if (product?.price) {
+      setPriceInput((product.price * 100).toString());
+    }
+  }, [product])
+  const { mutateAsync } = useCreateProduct();
+
+  const onSubmit = async (data: ProductFormValues) => {
+    await mutateAsync({
+      token,
+      params: data,
+    });
+    onSuccess();
+    reset();
+    setPriceInput("");
   }
 
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label>Nome</label>
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="name">Nome</Label>
+        <Input id="name" {...register("name")} />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
       </div>
-      <div>
-        <label>Preço</label>
-        <Input type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
+
+      <div className="space-y-2">
+        <Label htmlFor="description">Descrição</Label>
+        <Textarea
+          id="description"
+          {...register("description")}
+          placeholder="Ração balanceada com proteínas e vitaminas essenciais..."
+        />
+        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
       </div>
-      <Button className="w-full" type="submit">{product ? "Atualizar" : "Criar"}</Button>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="price">Preço (R$)</Label>
+          <Input
+            id="price"
+            value={
+              priceInput
+                ? (Number(priceInput) / 100).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })
+                : ""
+            }
+            onChange={(e) => {
+              const onlyNumbers = e.target.value.replace(/\D/g, "");
+              setPriceInput(onlyNumbers);
+              setValue("price", onlyNumbers ? Number(onlyNumbers) / 100 : 0);
+            }}
+          />
+          {errors.price && <p className="text-red-500 text-sm">{errors.price.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="category">Categoria</Label>
+          <Input
+            id="category"
+            {...register("category")}
+            placeholder="Pet Shop"
+          />
+          {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="imageUrl">Imagem (URL)</Label>
+        <Input
+          id="imageUrl"
+          {...register("imageUrl")}
+          placeholder="https://example.com/images/racao-caes-adultos-10kg.jpg"
+        />
+        {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl.message}</p>}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="stockQty">Estoque (Qtd)</Label>
+          <Input
+            id="stockQty"
+            type="number"
+            min="0"
+            {...register("stockQty", { valueAsNumber: true })}
+          />
+          {errors.stockQty && <p className="text-red-500 text-sm">{errors.stockQty.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="weightGrams">Peso (gramas)</Label>
+          <Input
+            id="weightGrams"
+            type="number"
+            min="0"
+            {...register("weightGrams", { valueAsNumber: true })}
+          />
+          {errors.weightGrams && <p className="text-red-500 text-sm">{errors.weightGrams.message}</p>}
+        </div>
+      </div>
+
+      <Button className="w-full" type="submit">
+        {isSubmitting ? <Spinner /> : (product ? "Atualizar" : "Criar")}
+        
+      </Button>
     </form>
   );
 }

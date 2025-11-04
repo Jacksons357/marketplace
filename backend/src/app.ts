@@ -5,6 +5,7 @@ import { routes } from "./infra/http/routes/routes";
 import { errorHandler } from "./shared/errors/error-handler";
 import fastifyLoggingPlugin from "./infra/fastify/fastify-logging-plugin";
 import { makeLogsService } from "./infra/factories/make-logs";
+import cors from "@fastify/cors";
 
 export const app = Fastify({
   logger: {
@@ -16,6 +17,13 @@ export const app = Fastify({
       },
     },
   },
+})
+
+app.register(cors, {
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 })
 
 app.register(swagger, {

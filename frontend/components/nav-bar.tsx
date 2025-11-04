@@ -25,7 +25,7 @@ import { useSession, signOut } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
 import { useCart } from "@/contexts/cart-context";
 
-export function Navbar() {
+export function Navbar({ isDashboard }: { isDashboard?: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, status } = useSession();
   const user = session?.user;
@@ -33,20 +33,17 @@ export function Navbar() {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <nav className="bg-white border-b border-border fixed top-0 left-0 right-0 z-50">
+    <nav className={`bg-white border-b border-border top-0 left-0 right-0 z-50 ${isDashboard ? 'block' : 'fixed'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link href="/" className="flex items-center">
             <span className="text-2xl font-bold text-primary">Marketplace</span>
           </Link>
 
-          {/* Links Desktop */}
           <div className="hidden md:block">
             <NavbarLinks user={user} status={status} />
           </div>
 
-          {/* Mobile Toggle */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
@@ -58,7 +55,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && <NavbarMobileMenu user={user} />}
     </nav>
   );

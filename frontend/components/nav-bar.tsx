@@ -121,7 +121,7 @@ function NavbarLinks({
 
       {user && user.role === "ADMIN" && (
         <Button variant="outline" asChild className="bg-transparent hover:bg-zinc-100/20">
-          <Link href="/dashboard/admin">Painel da ONG</Link>
+          <Link href="/dashboard">Painel da ONG</Link>
         </Button>
       )}
 
@@ -181,7 +181,7 @@ function UserMenu({ user }: { user: any }) {
       <DropdownMenuContent align="end">
         {user.role === "ADMIN" && (
           <DropdownMenuItem asChild>
-            <Link href="/dashboard/admin">
+            <Link href="/dashboard">
               <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
             </Link>
           </DropdownMenuItem>
@@ -238,7 +238,7 @@ function NavbarMobileMenu({ user }: { user?: any }) {
   return (
     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 md:hidden">
       {user.role === "ADMIN" && (
-        <Link href="/dashboard/admin" className="block px-3 py-2 text-primary font-medium">
+        <Link href="/dashboard" className="block px-3 py-2 text-primary font-medium">
           Painel da ONG
         </Link>
       )}

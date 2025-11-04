@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
+import { Separator } from '@/components/ui/separator'
 
 const loginSchema = z.object({
   email: z.email('Deve ser um email válido'),
@@ -121,6 +122,15 @@ export default function LoginPage() {
               Não tem uma conta?{' '}
               <Link href={`/auth/user/register?callbackUrl=${callbackUrl}`} className="text-primary font-medium hover:underline">
                 Cadastrar
+              </Link>
+            </p>
+          </div>
+          <Separator />
+          <div>
+            <p className="text-sm text-gray-600">
+              É de organização?{' '}
+              <Link href={`/auth/admin/register?callbackUrl=${callbackUrl}`} className="text-primary font-medium hover:underline">
+                Cadastrar como organização
               </Link>
             </p>
           </div>

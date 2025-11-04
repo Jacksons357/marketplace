@@ -6,6 +6,7 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 import { 
   createOrderBodySchemaDocs, 
   createOrderResponseSchemaDocs, 
+  getOrdersResponseSchemaDocs, 
   headersSchemaDocs 
 } from "../../../presentation/docs/swagger";
 
@@ -35,7 +36,7 @@ export const orderRoutes = async (app: FastifyInstance) => {
       description: 'Retrieve a list of all orders in the marketplace for the authenticated user',
       security: [{ BearerAuth: []}],
       headers: headersSchemaDocs,
-      response: createOrderResponseSchemaDocs
+      response: getOrdersResponseSchemaDocs
     }
   }, async (req: FastifyRequest, res: FastifyReply) => orderController.handler(req, res))
 }

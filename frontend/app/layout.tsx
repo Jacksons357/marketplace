@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/components/providers/auth-provider";
+import { Toaster } from "sonner";
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from "@/lib/query-client";
+import { QueryProvider } from "@/components/providers/query-provider";
+import { CartProvider } from "@/contexts/cart-context";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const inter = Inter({
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -25,9 +25,16 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
-        {children}
+        <QueryProvider>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+            <Toaster />
+            </CartProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

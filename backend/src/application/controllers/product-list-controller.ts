@@ -10,4 +10,9 @@ export class ProductListController {
     const products = await this.productListUseCase.execute(filters)
     res.send(products)
   }
+
+  async listCategories(req: FastifyRequest, res: FastifyReply) {
+    const categories = await this.productListUseCase.listCategories()
+    res.send(categories)
+  }
 }

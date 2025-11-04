@@ -13,7 +13,7 @@ export default fp(async function fastifyLoggingPlugin(
   fastify: FastifyInstance,
   opts: Options
 ) {
-  const { logsService, exclude = ['/logs', '/docs'] } = opts;
+  const { logsService, exclude = ['/logs', '/docs', '/products', '/auth'] } = opts;
 
   fastify.addHook('onRequest', async (req: FastifyRequest) => {
     (req as any).__startTime = Date.now();

@@ -4,16 +4,13 @@ import { useGetProductsByUserId } from "@/lib/queries/product";
 import { useSession } from "next-auth/react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import { TableProductSkeleton } from "@/components/skeletons/table-product-skeleton";
 
 export default function ProductsPage() {
   const { data: session } = useSession();
   const token = session?.user?.accessToken || "";
 
   const { data: products, isLoading } = useGetProductsByUserId(token);
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   return (
     <div className="p-6 space-y-6">
@@ -23,7 +20,11 @@ export default function ProductsPage() {
           Acesse a tabela para visualizar, editar e excluir seus produtos.
         </p>
       </div>
-      <DataTable token={token} columns={columns} data={products || []} />
+      {
+        isLoading ? <TableProductSkeleton /> : (
+          <DataTable token={token} columns={columns} data={products || []} />
+        )
+      }
     </div>
   )
 }

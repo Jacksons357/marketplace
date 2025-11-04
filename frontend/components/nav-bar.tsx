@@ -222,7 +222,7 @@ function NavbarMobileMenu({ user }: { user?: any }) {
           <UserPlus className="mr-2 h-4 w-4 inline" /> Criar Usuário
         </Link>
         <Link
-          href="/auth/login"
+          href="/auth/user/login"
           className="block px-3 py-2 bg-primary text-primary-foreground rounded-md"
         >
           Login

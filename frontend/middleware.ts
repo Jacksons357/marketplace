@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 const protectedPaths = ["/cart", "/orders", "/dashboard"];
-const authPages = ["/auth/login", "/auth/user/register", "/auth/admin/register"];
+const authPages = ["/auth/user/login", "/auth/user/register", "/auth/admin/register"];
 
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (!isLoggedIn && protectedPaths.some((path) => url.pathname.startsWith(path))) {
-    url.pathname = "/auth/login";
+    url.pathname = "/auth/user/login";
     url.searchParams.set("callbackUrl", req.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
@@ -36,7 +36,7 @@ export const config = {
     "/cart/:path*",
     "/orders/:path*",
     "/dashboard/:path*",
-    "/auth/login",
+    "/auth/user/login",
     "/auth/user/register",
     "/auth/admin/register",
   ],

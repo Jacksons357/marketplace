@@ -55,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <Card className="overflow-hidden">
       <div className="relative aspect-square">
         <Image
-          src={product.imageUrl}
+          src={product.imageUrl} 
           alt={product.name}
           fill
           className="object-cover"

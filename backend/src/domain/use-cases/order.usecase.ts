@@ -58,4 +58,18 @@ export class OrderUseCase {
       throw new AppError(error instanceof Error ? error.message : 'Internal error', 500)
     }
   }
+
+  async getByUserId(params: { userId: string }) {
+    try {
+      const user = await this.userRepository.findById(params.userId)
+      if (!user) {
+        throw new UserNotFoundError()
+      }
+      const orders = await this.orderRepository.findByUserId(params.userId)
+      return orders
+    } catch (error) {
+      if (error instanceof AppError) throw error
+      throw new AppError(error instanceof Error ? error.message : 'Internal error', 500)
+    }
+  }
 }

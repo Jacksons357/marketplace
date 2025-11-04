@@ -41,7 +41,7 @@ export class ProductRepository implements IProductRepository {
   async findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<Product[]> {
     const {
       page = 1,
-      limit = 10,
+      limit = 12,
       category,
       priceMin,
       priceMax,
@@ -112,7 +112,7 @@ export class ProductRepository implements IProductRepository {
   async list(filters?: ListProductFilters): Promise<Product[]> {
     const {
       page = 1,
-      limit = 10,
+      limit = 12,
       category,
       priceMin,
       priceMax,
@@ -149,7 +149,7 @@ export class ProductRepository implements IProductRepository {
       priceMin,
       priceMax,
       page = 1,
-      limit = 10
+      limit = 12
     } = filters
 
     const skip = (page - 1) * limit

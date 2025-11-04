@@ -5,14 +5,22 @@ import { CategoryLinks } from "@/components/ui/category-links";
 import { FilterNav } from "@/components/ui/filter-nav";
 import { AIFilter } from "@/components/ui/ai-filter";
 import { ProductList } from "@/components/ui/product-list";
-import { useGetCategories, useGetProducts } from "@/lib/queries/product";
 import { Footer } from "@/components/ui/footer";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { GetProductsParams } from "@/types/product";
+import { useGetAiSearch } from "@/lib/queries/product";
+import { ProductListSkeleton } from "@/components/skeletons/product-list-skeleton";
 
 export default function Home() {
   const [filters, setFilters] = useState<GetProductsParams>({});
+  const [aiSearch, setAiSearch] = useState<string>("");
+
+  const { data: aiData, isLoading: isLoadingAi } = useGetAiSearch(aiSearch);
+
+  const isAiMode = !!aiSearch;
+  function handleClearAISearch() {
+    setAiSearch("")
+  }
 
   return (
     <main className="min-h-screen pb-8">
@@ -23,10 +31,18 @@ export default function Home() {
         
         <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
           <FilterNav onFilterChange={setFilters} />
-          <AIFilter />
+          <AIFilter onAISearch={setAiSearch} onClearAISearch={handleClearAISearch} isActive={isAiMode} />
         </div>
-        
-         <ProductList filters={filters} />
+
+        {isAiMode ? (
+          isLoadingAi ? (
+            <ProductListSkeleton />
+          ) : (
+              <ProductList products={aiData?.products ?? []} />
+          )
+        ) : (
+          <ProductList filters={filters} />
+        )}
       </div>
 
       <Footer />

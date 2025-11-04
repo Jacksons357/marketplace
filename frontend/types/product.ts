@@ -20,3 +20,15 @@ export interface GetProductsParams {
   limit?: number;
   page?: number;
 }
+
+export interface AiSearchResponse {
+  products: Product[];
+  filters: {
+    priceMax?: number;
+    search?: string;
+    interpretation?: string;
+  };
+  total: number;
+  page: number;
+  limit: number;
+}

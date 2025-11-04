@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export function Banner() {
   return (
-    <div className="relative w-full h-[400px] bg-primary/5">
+    <div className="relative w-full h-[300px] bg-primary/5">
       <div className="absolute inset-0 bg-linear-to-r from-primary/90 to-background/50 z-10" />
       {/* <Image
         src="/banner.jpg"

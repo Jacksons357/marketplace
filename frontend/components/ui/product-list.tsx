@@ -1,24 +1,25 @@
-"use client";
-
 import { useGetProducts } from "@/lib/queries/product";
-import { ProductCard } from "./product-card";
+import { GetProductsParams, Product } from "@/types/product";
 import { ProductListSkeleton } from "../skeletons/product-list-skeleton";
-import { GetProductsParams } from "@/types/product";
+import { ProductCard } from "./product-card";
 
 interface ProductListProps {
-  filters: GetProductsParams;
+  filters?: GetProductsParams;
+  products?: Product[];
 }
 
-export function ProductList({ filters }: ProductListProps) {
-  const { data: products, isLoading: isLoadingProducts } = useGetProducts(filters)
+export function ProductList({ filters, products }: ProductListProps) {
+  const { data, isLoading } = useGetProducts(filters ?? {}, {
+    enabled: !products,
+  });
 
-  if (isLoadingProducts) {
-    return <ProductListSkeleton />
-  }
+  const list = products ?? data;
+
+  if (isLoading) return <ProductListSkeleton />;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {products?.map((product) => (
+      {list?.map((product: Product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

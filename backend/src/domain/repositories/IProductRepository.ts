@@ -36,4 +36,5 @@ export interface IProductRepository {
   list(filters?: ListProductFilters): Promise<Product[]>
   search(filters: ListProductFilters): Promise<Product[]>
   listCategories(): Promise<string[]>
+  findAll(ids: string[]): Promise<Product[]>
 }

@@ -66,7 +66,23 @@ export class OrderUseCase {
         throw new UserNotFoundError()
       }
       const orders = await this.orderRepository.findByUserId(params.userId)
-      return orders
+      const productIds = orders.flatMap(order => order.items.map(item => item.productId));
+      const products = await this.productRepository.findAll(productIds)
+      const productMap = new Map(products.map(p => [p.id, p]))
+      
+      const organizationIds = [...new Set(orders.map(order => order.organizationId))]
+      const organizations = await this.organizationRepository.findByIds(organizationIds)
+      const organizationMap = new Map(organizations.map(o => [o.id, o]))
+      
+      const enrichedOrders = orders.map(order => ({
+        ...order,
+        organizationName: organizationMap.get(order.organizationId)?.name || "Organização não encontrada",
+        items: order.items.map(item => ({
+          ...item,
+          name: productMap.get(item.productId)?.name || "Produto não encontrado"
+        }))
+      }))
+      return enrichedOrders
     } catch (error) {
       if (error instanceof AppError) throw error
       throw new AppError(error instanceof Error ? error.message : 'Internal error', 500)

@@ -39,7 +39,7 @@ cd backend
 yarn install
 ```
 
-3. Copie o arquivo de exemplo de variáveis de ambiente:
+3. Copie o arquivo de exemplo de variáveis de ambiente do back-end:
 ```bash
 cd backend
 cp .env.example .env
@@ -48,6 +48,16 @@ cp .env.example .env
 4. Configure as variáveis de ambiente no arquivo `.env` conforme necessário. Os valores padrão já estão configurados para desenvolvimento local.
 - Crie sua conta no ollama para utilizar o modelo de linguagem: [Ollama](https://ollama.com/settings/keys)
 - Adicione sua chave de API no arquivo `.env` como `OLLAMA_API_KEY=your_api_key`
+
+5. Volte para a pasta raiz do projeto e copie o arquivo de exemplo de variáveis de ambiente do front-end:
+```bash
+cd ..
+cd frontend
+cp .env.example .env
+```
+
+6. Configure as variáveis de ambiente no arquivo `.env` conforme necessário. Os valores padrão já estão configurados para desenvolvimento local.
+- Caso queira configurar supabase para utilizar o bucket: [Supabase](https://supabase.com/)
 
 ## Executando o Projeto
 

@@ -6,13 +6,13 @@ export function Banner() {
   return (
     <div className="relative w-full h-[400px] bg-primary/5">
       <div className="absolute inset-0 bg-linear-to-r from-primary/90 to-background/50 z-10" />
-      <Image
+      {/* <Image
         src="/banner.jpg"
         alt="Banner Marketplace"
         fill
         className="object-cover"
         priority
-      />
+      /> */}
       <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-4">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           Marketplace de ONGs

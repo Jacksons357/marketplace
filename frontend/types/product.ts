@@ -11,3 +11,11 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface GetProductsParams {
+  name?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  limit?: number;
+}

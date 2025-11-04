@@ -1,5 +1,7 @@
 "use client";
 
+import { useGetCategories, useGetProducts } from "@/lib/queries/product";
+import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
 import {
@@ -9,12 +11,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
+import { FilterNavSkeleton } from "../skeletons/filter-nav-skeleton";
 
 export function FilterNav() {
+  const { data: categories, isLoading: isLoadingCategories } = useGetCategories()
+
+  if (isLoadingCategories) {
+    return <FilterNavSkeleton />
+  }
+
   return (
     <div className="w-full bg-card p-4 rounded-lg shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-        <div className="col-span-1 lg:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-2">
+        <div className="col-span-1 lg:col-span-2 space-y-1">
           <Label htmlFor="search">Buscar</Label>
           <Input
             id="search"
@@ -22,7 +31,7 @@ export function FilterNav() {
             className="w-full"
           />
         </div>
-        <div>
+        <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="category">Categoria</Label>
           <Select>
             <SelectTrigger id="category">
@@ -30,12 +39,15 @@ export function FilterNav() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas</SelectItem>
-              <SelectItem value="artesanato">Artesanato</SelectItem>
-              <SelectItem value="decoracao">Decoração</SelectItem>
+              {categories?.map((category) => (
+                <SelectItem key={category} value={category} >
+                  {category}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
-        <div>
+        <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="priceMin">Preço Mínimo</Label>
           <Input
             id="priceMin"
@@ -44,7 +56,7 @@ export function FilterNav() {
             className="w-full"
           />
         </div>
-        <div>
+        <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="priceMax">Preço Máximo</Label>
           <Input
             id="priceMax"
@@ -53,7 +65,7 @@ export function FilterNav() {
             className="w-full"
           />
         </div>
-        <div>
+        <div className="col-span-1 lg:col-span-1 space-y-1" >
           <Label htmlFor="limit">Itens por página</Label>
           <Select>
             <SelectTrigger id="limit">
@@ -65,6 +77,9 @@ export function FilterNav() {
               <SelectItem value="36">36</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div className="col-span-1 lg:col-span-2 mt-2 flex items-center justify-center">
+          <Button className="w-full">Filtrar</Button>
         </div>
       </div>
     </div>

@@ -3,16 +3,20 @@
 import Link from "next/link";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
+import { useGetCategories } from "@/lib/queries/product";
+import { CategoryScrollSkeleton } from "../skeletons/category-links-skeleton";
 
-interface CategoryLinksProps {
-  categories: string[];
-}
+export function CategoryLinks() {
+  const { data: categories, isLoading: isLoadingCategories } = useGetCategories()
 
-export function CategoryLinks({ categories }: CategoryLinksProps) {
+  if (isLoadingCategories) {
+    return <CategoryScrollSkeleton />
+  }
+
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <div className="flex space-x-4 p-4">
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <Button
             key={category}
             variant="outline"

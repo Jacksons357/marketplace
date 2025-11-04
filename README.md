@@ -1,6 +1,22 @@
-# Marketplace Backend
+# Marketplace
 
-Este é o projeto Marketplace, desenvolvido com Node.js, TypeScript, Prisma e PostgreSQL.
+Este é o projeto Marketplace, desenvolvido com:
+
+**Backend**
+Node.js, TypeScript, Fastify, Prisma e PostgreSQL.
+- Principios de Clean Architecture
+- SOLID Principles
+- DDD
+- Clean CODE
+
+**Frontend**
+Next.js, TypeScript, TailwindCSS e React.
+- Componentes reutilizáveis
+- Páginas estáticas e dinâmicas
+- Rotas dinâmicas
+- API Routes
+- Server-Side Rendering (SSR)
+- Client-Side Rendering (CSR)
 
 ## Pré-requisitos
 
@@ -30,6 +46,8 @@ cp .env.example .env
 ```
 
 4. Configure as variáveis de ambiente no arquivo `.env` conforme necessário. Os valores padrão já estão configurados para desenvolvimento local.
+- Crie sua conta no ollama para utilizar o modelo de linguagem: [Ollama](https://ollama.com/settings/keys)
+- Adicione sua chave de API no arquivo `.env` como `OLLAMA_API_KEY=your_api_key`
 
 ## Executando o Projeto
 
@@ -55,8 +73,10 @@ yarn docker:seed
 ## Serviços Disponíveis
 
 - **API Backend**: http://localhost:3333
+- **Rotas API - Swagger Docs**: http://localhost:3333/docs
 - **Prisma Studio**: http://localhost:5555
 - **Banco de Dados**: localhost:5432
+- **Frontend**: http://localhost:3000
 
 ## Estrutura do Projeto
 
@@ -70,11 +90,118 @@ backend/
 │   └── shared/        # Recursos compartilhados
 ```
 
+```
+frontend/
+│   ├── app/
+│   ├── components/
+│   ├── contexts/
+│   ├── hooks/
+│   ├── lib/
+│   ├── public/
+│   ├── types/
+│   └── utils/
+```
+
 ## Desenvolvimento
 
 - O código fonte é automaticamente sincronizado com o container Docker
+- A documentação dos endpoints está disponível em http://localhost:3333/docs
 - As alterações no código são recarregadas automaticamente
 - O Prisma Studio permite visualizar e editar dados do banco
+
+## Modelagem de Dados
+
+### Organization
+- `id`: string (PK, UUID)
+- `name`: string
+- `description`: string (opcional)
+- `users`: relação 1:N com `User`
+- `products`: relação 1:N com `Product`
+- `orders`: relação 1:N com `Order`
+- `createdAt`: DateTime (default now)
+- `updatedAt`: DateTime (atualizado automaticamente)
+
+### User
+- `id`: string (PK, UUID)
+- `name`: string
+- `email`: string (único)
+- `phone`: string (opcional, único)
+- `passwordHash`: string
+- `role`: enum `UserRole` (default `USER`)
+- `organizationId`: string (FK opcional)
+- `organization`: relação N:1 com `Organization`
+- `orders`: relação 1:N com `Order`
+- `createdAt`: DateTime (default now)
+- `updatedAt`: DateTime (atualizado automaticamente)
+
+### UserRole (Enum)
+- `ADMIN`
+- `USER`
+
+### Product
+- `id`: string (PK, UUID)
+- `organizationId`: string (FK)
+- `organization`: relação N:1 com `Organization`
+- `name`: string
+- `description`: string (opcional)
+- `price`: Decimal(10,2)
+- `category`: string
+- `imageUrl`: string (opcional)
+- `stockQty`: int
+- `weightGrams`: int
+- `createdAt`: DateTime (default now)
+- `updatedAt`: DateTime (atualizado automaticamente)
+- `orderItems`: relação 1:N com `OrderItem`
+
+### Order
+- `id`: string (PK, UUID)
+- `userId`: string (FK)
+- `user`: relação N:1 com `User`
+- `organizationId`: string (FK)
+- `organization`: relação N:1 com `Organization`
+- `items`: relação 1:N com `OrderItem`
+- `totalPrice`: float
+- `status`: enum `OrderStatus` (default `PENDING`)
+- `createdAt`: DateTime (default now)
+- `updatedAt`: DateTime (atualizado automaticamente)
+
+### OrderItem
+- `id`: string (PK, UUID)
+- `orderId`: string (FK)
+- `order`: relação N:1 com `Order`
+- `productId`: string (FK)
+- `product`: relação N:1 com `Product`
+- `organizationId`: string
+- `quantity`: int
+- `priceAtPurchase`: float
+- `createdAt`: DateTime (default now)
+- `updatedAt`: DateTime (atualizado automaticamente)
+
+### OrderStatus (Enum)
+- `PENDING`
+- `CONFIRMED`
+- `CANCELLED`
+
+### Log
+- `id`: string (PK, UUID)
+- `userId`: string (opcional)
+- `organizationId`: string (opcional)
+- `route`: string
+- `method`: string
+- `status`: int
+- `latencyMs`: int
+- `payload`: JSON (opcional)
+- `createdAt`: DateTime (default now)
+
+### AiSearchLog
+- `id`: string (PK, UUID)
+- `userId`: string (opcional)
+- `organizationId`: string (opcional)
+- `query`: string
+- `filters`: JSON
+- `success`: boolean
+- `fallbackApplied`: boolean
+- `createdAt`: DateTime (default now)
 
 ## Troubleshooting
 

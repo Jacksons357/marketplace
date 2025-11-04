@@ -1,6 +1,6 @@
 import { axiosPublicAPI } from "@/lib/axios/axios-server";
 import { CreateProductParams } from "@/lib/mutations/product";
-import { AiSearchResponse, GetProductsParams, Product, UpdateProductParams } from "@/types/product";
+import { AiSearchResponse, GetProductsParams, Product, ProductsResponse, UpdateProductParams } from "@/types/product";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
@@ -42,11 +42,15 @@ export async function getAiSearch(search: string): Promise<AiSearchResponse | un
   }
 }
 
-export async function getProductsByUserId(token: string ): Promise<Product[] | undefined> {
+export async function getProductsByUserId(token: string, page: number, limit: number): Promise<ProductsResponse | undefined> {
   try {
-    const response = await axios.get<Product[]>(`${process.env.NEXT_PUBLIC_API_URL}/admin/products`, {
+    const response = await axios.get<ProductsResponse>(`${process.env.NEXT_PUBLIC_API_URL}/admin/products`, {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        page,
+        limit,
       }
     })
     return response.data

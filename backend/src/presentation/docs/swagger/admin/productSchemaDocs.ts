@@ -48,22 +48,28 @@ export const productListQuerySchemaDocs = {
 export const productListResponseSchemaDocs = {
   200: {
     description: 'OK',
-    type: 'array',
-    items: {
-      type: 'object',
-      properties: {
-        id: { type: 'string' },
-        organizationId: { type: 'string' },
-        name: { type: 'string' },
-        description: { type: 'string' },
-        price: { type: 'number' },
-        category: { type: 'string' },
-        imageUrl: { type: 'string' },
-        stockQty: { type: 'number' },
-        weightGrams: { type: 'number' },
-        createdAt: { type: 'string' },
-        updatedAt: { type: 'string' },
-      }
+    type: 'object',
+    properties: {
+      data: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            organizationId: { type: 'string' },
+            name: { type: 'string' },
+            description: { type: 'string' },
+            price: { type: 'number' },
+            category: { type: 'string' },
+            imageUrl: { type: 'string' },
+            stockQty: { type: 'number' },
+            weightGrams: { type: 'number' },
+            createdAt: { type: 'string' },
+            updatedAt: { type: 'string' },
+          }
+        }
+      },
+      total: { type: 'number' }
     }
   }
 }

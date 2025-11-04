@@ -9,6 +9,7 @@ export class ProductAdminListController {
     const userId = req.user.sub as string
     const filters = req.query as ListProductFilters
     const products = await this.productAdminListUseCase.execute(userId, filters)
+    console.log(products)
     res.status(200).send(products)
   }
 }

@@ -5,12 +5,15 @@ import { useSession } from "next-auth/react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { TableProductSkeleton } from "@/components/skeletons/table-product-skeleton";
+import { useState } from "react";
 
 export default function ProductsPage() {
   const { data: session } = useSession();
   const token = session?.user?.accessToken || "";
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
 
-  const { data: products, isLoading } = useGetProductsByUserId(token);
+  const { data: products, isLoading } = useGetProductsByUserId(token, page, limit);
 
   console.log(products)
 
@@ -24,7 +27,19 @@ export default function ProductsPage() {
       </div>
       {
         isLoading ? <TableProductSkeleton /> : (
-          <DataTable token={token} columns={columns} data={products || []} />
+          <DataTable
+            token={token}
+            columns={columns}
+            data={products?.data || []}
+            page={page}
+            limit={limit}
+            loading={isLoading}
+            total={products?.total || 0}
+            onPaginationChange={(newPage, newLimit) => {
+              setPage(newPage)
+              setLimit(newLimit)
+            }}
+          />
         )
       }
     </div>

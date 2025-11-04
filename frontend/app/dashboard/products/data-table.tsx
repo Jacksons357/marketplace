@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button"
 import { PlusIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ProductForm } from "./product-form"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Product } from "@/types/product"
 import { ProductTableProvider } from "./table-context"
 import { useDeleteProduct } from "@/lib/mutations/product"
@@ -31,19 +31,29 @@ import { TableProductSkeleton } from "@/components/skeletons/table-product-skele
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  page: number;
+  limit: number;
+  total: number;
   token: string;
+  loading: boolean;
+  onPaginationChange?: (page: number, limit: number) => void
 }
 
 export function DataTable<TData, TValue>({
   token,
   columns,
+  page,
+  limit,
   data,
+  total,
+  onPaginationChange,
+  loading,
 }: DataTableProps<TData, TValue>) {
   const [isOpen, setIsOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { mutateAsync: deleteProduct } = useDeleteProduct();
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 })
+  const [pagination, setPagination] = useState({ pageIndex: page - 1, pageSize: limit })
   const table = useReactTable({
     data,
     columns,
@@ -54,6 +64,11 @@ export function DataTable<TData, TValue>({
     onPaginationChange: setPagination,
   })
 
+  useEffect(() => {
+    setPagination({ pageIndex: page - 1, pageSize: limit })
+  }, [page, limit])
+
+
   const handleEdit = (product: Product) => {
     setSelectedProduct(product);
     setEditOpen(true);
@@ -62,6 +77,19 @@ export function DataTable<TData, TValue>({
   const handleDelete = async (product: Product) => {
     if (!token) return;
     await deleteProduct({ token, productId: product.id });
+  }
+
+  const handlePrev = () => {
+    if (page > 1 && onPaginationChange) onPaginationChange(page - 1, limit)
+  }
+
+  const handleNext = () => {
+    if (page < total / limit && onPaginationChange) onPaginationChange(page + 1, limit)
+  }
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    setPagination((prev) => ({ pageIndex: 0, pageSize: newPageSize })); // reset pageIndex
+    if (onPaginationChange) onPaginationChange(1, newPageSize);
   }
 
   return (
@@ -117,7 +145,13 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <TableProductSkeleton />
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -134,7 +168,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  <TableProductSkeleton />
+                  Nenhum produto encontrado
                 </TableCell>
               </TableRow>
             )}
@@ -148,11 +182,8 @@ export function DataTable<TData, TValue>({
           <Input
             type="number"
             min={1}
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              const next = Number(e.target.value) || 10
-              table.setPageSize(next)
-            }}
+            value={pagination.pageSize}
+            onChange={(e) => handlePageSizeChange(Number(e.target.value) || 10)}
             className="w-20 h-8"
           />
         </div>
@@ -160,19 +191,19 @@ export function DataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={handlePrev}
+            disabled={page === 1 || loading}
           >
             Anterior
           </Button>
           <span className="text-sm">
-            Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
+            Página {page} de {Math.ceil(total / limit)}
           </span>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={handleNext}
+            disabled={page >= Math.ceil(total / limit) || loading}
           >
             Próxima
           </Button>

@@ -181,4 +181,12 @@ export class ProductRepository implements IProductRepository {
     
     return products.map(mapPrismaProductToEntity)
   }
+
+  async listCategories(): Promise<string[]> {
+    const categories = await prisma.product.findMany({
+      distinct: ["category"],
+      select: { category: true },
+    })
+    return categories.map((p) => p.category)
+  }
 }

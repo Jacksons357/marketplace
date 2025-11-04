@@ -35,4 +35,5 @@ export interface IProductRepository {
   delete(params: ProductAdminDeleteParams): Promise<Product>
   list(filters?: ListProductFilters): Promise<Product[]>
   search(filters: ListProductFilters): Promise<Product[]>
+  listCategories(): Promise<string[]>
 }

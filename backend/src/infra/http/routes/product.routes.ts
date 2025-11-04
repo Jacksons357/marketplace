@@ -27,4 +27,13 @@ export function productRoutes(app: FastifyInstance) {
       querystring: productListQuerySchemaDocs
     }
   }, async (req: FastifyRequest, res: FastifyReply) => productAiSearchController.search(req, res))
+
+  app.get('/categories', {
+    preHandler: optionalAuth,
+    schema: {
+      tags: ['Products'],
+      summary: 'List Product Categories',
+      description: 'List all product categories of the all organization',
+    }
+  }, async (req: FastifyRequest, res: FastifyReply) => productListController.listCategories(req, res))
 }

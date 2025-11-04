@@ -21,6 +21,9 @@ import { PlusIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ProductForm } from "./product-form"
 import { useState } from "react"
+import { Product } from "@/types/product"
+import { ProductTableProvider } from "./table-context"
+import { useDeleteProduct } from "@/lib/mutations/product"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -34,14 +37,28 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [isOpen, setIsOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const { mutateAsync: deleteProduct } = useDeleteProduct();
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
 
+  const handleEdit = (product: Product) => {
+    setSelectedProduct(product);
+    setEditOpen(true);
+  }
+
+  const handleDelete = async (product: Product) => {
+    if (!token) return;
+    await deleteProduct({ token, productId: product.id });
+  }
+
   return (
-    <div className="flex flex-col space-y-4">
+    <ProductTableProvider value={{ onEdit: handleEdit, onDelete: handleDelete }}>
+      <div className="flex flex-col space-y-4">
       <div className="flex justify-between">
         <Input
           placeholder="Buscar por nome"
@@ -116,6 +133,29 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Produto</DialogTitle>
+            <DialogDescription>
+              Atualize os dados do produto selecionado.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedProduct && (
+            <ProductForm
+              token={token}
+              product={selectedProduct}
+              onSuccess={() => {
+                setEditOpen(false);
+                setSelectedProduct(null);
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
+    </ProductTableProvider>
   )
 }

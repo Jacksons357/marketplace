@@ -32,3 +32,13 @@ export interface AiSearchResponse {
   page: number;
   limit: number;
 }
+
+export interface UpdateProductParams {
+  name?: string;
+  description?: string;
+  price?: number;
+  category?: string;
+  imageUrl?: string;
+  stockQty?: number;
+  weightGrams?: number;
+}

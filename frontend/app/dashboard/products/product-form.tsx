@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateProduct } from "@/lib/mutations/product";
+import { useCreateProduct, useUpdateProduct } from "@/lib/mutations/product";
 import { Spinner } from "@/components/ui/spinner";
 
 interface ProductFormProps {
@@ -56,13 +56,15 @@ export function ProductForm({ token, product, onSuccess }: ProductFormProps) {
       setPriceInput((product.price * 100).toString());
     }
   }, [product])
-  const { mutateAsync } = useCreateProduct();
+  const { mutateAsync: createMutate } = useCreateProduct();
+  const { mutateAsync: updateMutate } = useUpdateProduct();
 
   const onSubmit = async (data: ProductFormValues) => {
-    await mutateAsync({
-      token,
-      params: data,
-    });
+    if (product?.id) {
+      await updateMutate({ token, productId: product.id, params: data });
+    } else {
+      await createMutate({ token, params: data });
+    }
     onSuccess();
     reset();
     setPriceInput("");

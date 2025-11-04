@@ -53,10 +53,10 @@ cp .env.example .env
 ```bash
 cd ..
 cd frontend
-cp .env.example .env
+cp .env.example .env.local
 ```
 
-6. Configure as variáveis de ambiente no arquivo `.env` conforme necessário. Os valores padrão já estão configurados para desenvolvimento local.
+6. Configure as variáveis de ambiente no arquivo `.env.local` conforme necessário. Os valores padrão já estão configurados para desenvolvimento local.
 - Caso queira configurar supabase para utilizar o bucket: [Supabase](https://supabase.com/)
 
 ## Executando o Projeto

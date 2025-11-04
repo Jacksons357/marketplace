@@ -104,7 +104,7 @@ function NavbarLinks({
         <>
           <NavbarDropdown />
           <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <Link href="/auth/login">Login</Link>
+            <Link href="/auth/user/login">Login</Link>
           </Button>
         </>
       )}

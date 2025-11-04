@@ -88,6 +88,20 @@ yarn docker:seed
 - **Banco de Dados**: localhost:5432
 - **Frontend**: http://localhost:3000
 
+## Logs
+
+<img width="1892" height="807" alt="image" src="https://github.com/user-attachments/assets/c06097f5-b785-4723-951c-d4928d53ebd3" />
+
+Para visualizar e analisar os registros de requisições, é necessário autenticar-se com as credenciais de acesso abaixo:
+
+```
+username: dev
+password: falcoes
+```
+
+Após inserir as informações acima no formulário, o sistema exibirá todos os logs registrados, incluindo rota, método HTTP, status da resposta, tempo de latência e data da requisição.
+
+
 ## Estrutura do Projeto
 
 ```

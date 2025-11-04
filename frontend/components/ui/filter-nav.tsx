@@ -1,6 +1,7 @@
 "use client";
 
-import { useGetCategories, useGetProducts } from "@/lib/queries/product";
+import { useState } from "react";
+import { useGetCategories } from "@/lib/queries/product";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
@@ -12,12 +13,45 @@ import {
   SelectValue,
 } from "./select";
 import { FilterNavSkeleton } from "../skeletons/filter-nav-skeleton";
+import { GetProductsParams } from "@/types/product";
 
-export function FilterNav() {
-  const { data: categories, isLoading: isLoadingCategories } = useGetCategories()
+interface FilterNavProps {
+  onFilterChange: (filters: GetProductsParams) => void;
+}
 
-  if (isLoadingCategories) {
-    return <FilterNavSkeleton />
+export function FilterNav({ onFilterChange }: FilterNavProps) {
+  const { data: categories, isLoading: isLoadingCategories } = useGetCategories();
+
+  const [filters, setFilters] = useState<GetProductsParams>({
+    search: "",
+    category: "all",
+    limit: 12,
+  });
+
+  if (isLoadingCategories) return <FilterNavSkeleton />;
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { id, value } = e.target;
+    setFilters((prev) => ({ ...prev, [id]: value }));
+  }
+
+  function handleCategoryChange(value: string) {
+    setFilters((prev) => ({ ...prev, category: value }));
+  }
+
+  function handleLimitChange(value: string) {
+    setFilters((prev) => ({ ...prev, limit: Number(value) }));
+  }
+
+  function handleFilter() {
+    const parsed = {
+      search: filters.search || undefined,
+      category: filters.category === "all" ? undefined : filters.category,
+      priceMin: filters.priceMin ? Number(filters.priceMin) : undefined,
+      priceMax: filters.priceMax ? Number(filters.priceMax) : undefined,
+      limit: filters.limit,
+    };
+    onFilterChange(parsed);
   }
 
   return (
@@ -28,46 +62,60 @@ export function FilterNav() {
           <Input
             id="search"
             placeholder="Digite o nome do produto..."
+            value={filters.search}
+            onChange={handleChange}
             className="w-full"
           />
         </div>
+
         <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="category">Categoria</Label>
-          <Select>
+          <Select
+            value={filters.category}
+            onValueChange={handleCategoryChange}
+          >
             <SelectTrigger id="category">
               <SelectValue placeholder="Selecione" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas</SelectItem>
               {categories?.map((category) => (
-                <SelectItem key={category} value={category} >
+                <SelectItem key={category} value={category}>
                   {category}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
+
         <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="priceMin">Preço Mínimo</Label>
           <Input
             id="priceMin"
             type="number"
             placeholder="R$ 0,00"
-            className="w-full"
+            value={filters.priceMin || ""}
+            onChange={handleChange}
           />
         </div>
+
         <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="priceMax">Preço Máximo</Label>
           <Input
             id="priceMax"
             type="number"
             placeholder="R$ 999,99"
-            className="w-full"
+            value={filters.priceMax || ""}
+            onChange={handleChange}
           />
         </div>
-        <div className="col-span-1 lg:col-span-1 space-y-1" >
+
+        <div className="col-span-1 lg:col-span-1 space-y-1">
           <Label htmlFor="limit">Itens por página</Label>
-          <Select>
+          <Select
+            value={String(filters.limit)}
+            onValueChange={handleLimitChange}
+          >
             <SelectTrigger id="limit">
               <SelectValue placeholder="12" />
             </SelectTrigger>
@@ -78,8 +126,11 @@ export function FilterNav() {
             </SelectContent>
           </Select>
         </div>
+
         <div className="col-span-1 lg:col-span-2 mt-2 flex items-center justify-center">
-          <Button className="w-full">Filtrar</Button>
+          <Button onClick={handleFilter} className="w-full">
+            Filtrar
+          </Button>
         </div>
       </div>
     </div>

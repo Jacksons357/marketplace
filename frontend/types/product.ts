@@ -13,9 +13,10 @@ export interface Product {
 }
 
 export interface GetProductsParams {
-  name?: string;
+  search?: string;
   category?: string;
-  minPrice?: number;
-  maxPrice?: number;
+  priceMin?: number;
+  priceMax?: number;
   limit?: number;
+  page?: number;
 }

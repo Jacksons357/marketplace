@@ -8,8 +8,12 @@ import { ProductList } from "@/components/ui/product-list";
 import { useGetCategories, useGetProducts } from "@/lib/queries/product";
 import { Footer } from "@/components/ui/footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
+import { GetProductsParams } from "@/types/product";
 
 export default function Home() {
+  const [filters, setFilters] = useState<GetProductsParams>({});
+
   return (
     <main className="min-h-screen pb-8">
       <Banner />
@@ -18,11 +22,11 @@ export default function Home() {
         <CategoryLinks />
         
         <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
-          <FilterNav />
+          <FilterNav onFilterChange={setFilters} />
           <AIFilter />
         </div>
         
-         <ProductList />
+         <ProductList filters={filters} />
       </div>
 
       <Footer />

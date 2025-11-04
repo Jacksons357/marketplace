@@ -3,9 +3,14 @@
 import { useGetProducts } from "@/lib/queries/product";
 import { ProductCard } from "./product-card";
 import { ProductListSkeleton } from "../skeletons/product-list-skeleton";
+import { GetProductsParams } from "@/types/product";
 
-export function ProductList() {
-  const { data: products, isLoading: isLoadingProducts } = useGetProducts({})
+interface ProductListProps {
+  filters: GetProductsParams;
+}
+
+export function ProductList({ filters }: ProductListProps) {
+  const { data: products, isLoading: isLoadingProducts } = useGetProducts(filters)
 
   if (isLoadingProducts) {
     return <ProductListSkeleton />

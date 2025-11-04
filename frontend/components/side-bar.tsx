@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Package, ShoppingBag, BarChart3, LayoutDashboard, Settings } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 export default function Sidebar() {
   const items = [
@@ -29,6 +30,24 @@ export default function Sidebar() {
               <span className="text-sm">{label}</span>
             </Link>
           ))}
+          <Separator />
+
+          <Link
+            key={"/dashboard/logs"}
+            href={"/dashboard/logs"}
+            className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            <Settings className="h-4 w-4" />
+            <span className="text-sm">Logs</span>
+          </Link>
+          <Link
+            key={"/dashboard/logs-ai"}
+            href={"/dashboard/logs-ai"}
+            className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            <Settings className="h-4 w-4" />
+            <span className="text-sm">Logs AI</span>
+          </Link>
         </nav>
       </div>
     </aside>

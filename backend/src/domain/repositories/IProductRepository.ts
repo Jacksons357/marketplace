@@ -29,7 +29,7 @@ export interface ListProductFilters {
 
 export interface IProductRepository {
   create(product: Product): Promise<Product>
-  findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<Product[]>
+  findByOrganization(organizationId: string, filters?: ListProductFilters): Promise<{ data: Product[], total: number }>
   findById(productId: string): Promise<Product | null>
   update(params: ProductAdminUpdateParams): Promise<Product>
   delete(params: ProductAdminDeleteParams): Promise<Product>

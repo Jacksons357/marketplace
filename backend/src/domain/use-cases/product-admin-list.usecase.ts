@@ -20,7 +20,6 @@ export class ProductAdminListUseCase {
       throw new UserNotBelongOrganizationError()
     }
 
-    const products = await this.productRepository.findByOrganization(organizationId, filters)
-    return products
+    return this.productRepository.findByOrganization(organizationId, filters)
   }
 }

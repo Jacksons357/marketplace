@@ -12,6 +12,11 @@ export interface Product {
   updatedAt: string;
 }
 
+export interface ProductsResponse {
+  data: Product[]
+  total: number
+}
+
 export interface GetProductsParams {
   search?: string;
   category?: string;

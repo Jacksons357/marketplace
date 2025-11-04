@@ -13,7 +13,7 @@ export function useGetProducts(
     queryKey: ["products", params],
     queryFn: () => getProducts(params),
     staleTime: 1000 * 60 * 2,
-    ...options, // aqui é o segredo
+    ...options,
   });
 }
 
@@ -34,11 +34,12 @@ export function useGetAiSearch(search: string) {
   })
 }
 
-export function useGetProductsByUserId(token: string) {
+export function useGetProductsByUserId(token: string, page: number, limit: number) {
   return useQuery({
-    queryKey: ['products-by-user-id', token],
-    queryFn: () => getProductsByUserId(token),
+    queryKey: ['products-by-user-id', token, page, limit],
+    queryFn: () => getProductsByUserId(token, page, limit),
     enabled: !!token,
     staleTime: 1000 * 60 * 2,
+    placeholderData: (prev) => prev,
   })
 }

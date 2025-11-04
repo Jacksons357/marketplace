@@ -22,4 +22,19 @@ export class OrderController {
       return res.status(500).send({ message: 'Internal server error' })
     }
   }
+
+  async handler(req: FastifyRequest, res: FastifyReply) {
+    try{ 
+      const userId = req.user.sub as string
+      const result = await this.orderUseCase.getByUserId({
+        userId,
+      })
+      return res.status(200).send(result)
+    } catch (error) {
+      if (error instanceof AppError) {
+        return res.status(error.code).send({ message: error.message })
+      }
+      return res.status(500).send({ message: 'Internal server error' })
+    }
+  }
 }

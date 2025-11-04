@@ -2,7 +2,7 @@
 import { z } from 'zod'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -32,6 +32,12 @@ export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [generalError, setGeneralError] = useState('')
+  const { data: session } = useSession()
+  const isAuthenticated = !!session
+  if (isAuthenticated) {
+    router.push('/')
+    return null
+  }
 
   const {
     register,
@@ -85,7 +91,7 @@ export default function RegisterPage() {
           <h1 className="text-2xl font-bold text-gray-800">Criar Conta</h1>
           <p className="mt-2 text-sm text-gray-600">
             Já tem uma conta?{' '}
-            <Link href="/auth/login" className="text-primary hover:underline">
+            <Link href="/auth/user/login" className="text-primary hover:underline">
               Entrar
             </Link>
           </p>

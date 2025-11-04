@@ -36,4 +36,13 @@ export class OrganizationRepository implements IOrganizationRepository {
       r => new Organization(r.id, r.name, r.description)
     )
   }
+
+  async findByIds(ids: string[]): Promise<Organization[]> {
+    const records = await prisma.organization.findMany({
+      where: { id: { in: ids } }
+    })
+    return records.map(
+      r => new Organization(r.id, r.name, r.description)
+    )
+  }
 }

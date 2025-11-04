@@ -27,6 +27,7 @@ export default function LoginPage() {
     searchParams.get('error') ? 'Email ou senha inválidos. Por favor, tente novamente.' : null
   )
   const [loading, setLoading] = useState(false)
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const {
     register,
@@ -53,7 +54,7 @@ export default function LoginPage() {
       }
       toast.success('Login realizado com sucesso!')
 
-      router.push('/')
+      router.push(callbackUrl)
       router.refresh()
     } catch (error) {
       console.error('Login error:', error)
@@ -118,7 +119,7 @@ export default function LoginPage() {
           <div>
             <p className="text-sm text-gray-600">
               Não tem uma conta?{' '}
-              <Link href="/auth/user/register" className="text-primary font-medium hover:underline">
+              <Link href={`/auth/user/register?callbackUrl=${callbackUrl}`} className="text-primary font-medium hover:underline">
                 Cadastrar
               </Link>
             </p>

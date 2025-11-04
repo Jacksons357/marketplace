@@ -15,4 +15,5 @@ export interface OrderCreateParams {
 
 export interface IOrderRepository {
   create(order: Order): Promise<Order | null>
+  findByUserId(userId: string): Promise<Order[]>
 }

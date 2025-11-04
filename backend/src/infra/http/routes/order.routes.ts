@@ -27,4 +27,15 @@ export const orderRoutes = async (app: FastifyInstance) => {
       validateBody(orderCreateSchema),
     ]
   },async (req: FastifyRequest, res:FastifyReply) => orderController.create(req, res))
+
+  app.get('/', {
+    schema: {
+      tags: ['Orders'],
+      summary: 'Get orders by user',
+      description: 'Retrieve a list of all orders in the marketplace for the authenticated user',
+      security: [{ BearerAuth: []}],
+      headers: headersSchemaDocs,
+      response: createOrderResponseSchemaDocs
+    }
+  }, async (req: FastifyRequest, res: FastifyReply) => orderController.handler(req, res))
 }

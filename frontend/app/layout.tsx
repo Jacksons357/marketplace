@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "@/lib/query-client";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { CartProvider } from "@/contexts/cart-context";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,8 +29,10 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            {children}
+            <CartProvider>
+              {children}
             <Toaster />
+            </CartProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

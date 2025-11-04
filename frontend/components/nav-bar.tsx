@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSession, signOut } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
+import { useCart } from "@/contexts/cart-context";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,6 +73,9 @@ function NavbarLinks({
   user?: any;
   status: "authenticated" | "unauthenticated" | "loading";
 }) {
+  const { items } = useCart();
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+
   if (status === "loading") {
     // Skeleton enquanto carrega sessão
     return (
@@ -106,6 +110,11 @@ function NavbarLinks({
           <Button variant="ghost" asChild>
             <Link href="/cart">
               <ShoppingCart className="w-4 h-4 mr-1" /> Carrinho
+              {totalItems > 0 && (
+                <span className=" bg-primary text-white text-xs font-bold rounded-full px-1.5">
+                  {totalItems}
+                </span>
+              )}
             </Link>
           </Button>
           <Button variant="ghost" asChild>

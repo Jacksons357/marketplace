@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/nav-bar";
-import "../globals.css"; // garante estilos globais (Tailwind etc.)
+import "../globals.css"
 
 export const metadata = {
   title: "Marketplace Multi-ONG",

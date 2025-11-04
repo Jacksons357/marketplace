@@ -12,20 +12,45 @@ import {
   CardTitle,
 } from "./card";
 import { Badge } from "./badge";
+import { useCart } from "@/contexts/cart-context";
+import { useState } from "react";
+import { Spinner } from "./spinner";
 
 interface ProductCardProps {
   product: {
     id: string;
+    organizationId: string;
     name: string;
     description: string;
     price: number;
     category: string;
     imageUrl: string;
     stockQty: number;
+    weightGrams: number;
   };
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false)
+
+  async function handleAddToCart() {
+    setIsAdding(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    addToCart({
+      productId: product.id,
+      organizationId: product.organizationId,
+      name: product.name,
+      priceAtPurchase: product.price,
+      quantity: 1,
+      imageUrl: product.imageUrl,
+    });
+
+    setIsAdding(false);
+  }
+
   return (
     <Card className="overflow-hidden">
       <div className="relative aspect-square">
@@ -54,11 +79,26 @@ export function ProductCard({ product }: ProductCardProps) {
             currency: "BRL",
           }).format(product.price)}
         </div>
+        <div className="text-sm text-gray-500">
+          Peso: {product.weightGrams}g
+        </div>
       </CardContent>
       <CardFooter className="p-4">
-        <Button className="w-full">
-          <ShoppingCart className="w-4 h-4 mr-2" />
-          Adicionar ao Carrinho
+        <Button
+          className="w-full"
+          disabled={isAdding}
+          onClick={handleAddToCart}
+        >
+          {isAdding ? (
+            <>
+              <Spinner />
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Adicionar ao Carrinho
+            </>
+          )}
         </Button>
       </CardFooter>
     </Card>

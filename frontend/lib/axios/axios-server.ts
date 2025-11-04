@@ -2,11 +2,11 @@ import axios from 'axios';
 import { getServerSession } from 'next-auth';
 
 export const axiosPublicAPI = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 const axiosServerAPI = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 axiosServerAPI.interceptors.request.use(async (config) => {

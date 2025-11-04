@@ -8,8 +8,8 @@ if (!process.env.NEXTAUTH_SECRET) {
   throw new Error('NEXTAUTH_SECRET is not set')
 }
 
-if (!process.env.API_URL) {
-  throw new Error('API_URL is not set')
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not set')
 }
 
 const authOptions: AuthOptions = {
@@ -27,7 +27,7 @@ const authOptions: AuthOptions = {
         }
 
         try {
-          const response = await axios.post(`${process.env.API_URL}/auth/login`, {
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
             email: credentials.email,
             password: credentials.password,
           })

@@ -110,16 +110,18 @@ function NavbarLinks({
       )}
 
       {/* Links para usuários logados */}
-      {user && user.role === "ADMIN" && (
-        <Button variant="outline" asChild>
-          <Link href="/dashboard/admin">Painel da ONG</Link>
-        </Button>
-      )}
-      {user && user.role === "USER" && (
+      
+      {user && (
         <Button variant="ghost" asChild>
           <Link href="/orders">
             <ListCheck className="w-4 h-4 mr-1" /> Pedidos
           </Link>
+        </Button>
+      )}
+
+      {user && user.role === "ADMIN" && (
+        <Button variant="outline" asChild className="bg-transparent hover:bg-zinc-100/20">
+          <Link href="/dashboard/admin">Painel da ONG</Link>
         </Button>
       )}
 
@@ -240,7 +242,7 @@ function NavbarMobileMenu({ user }: { user?: any }) {
           Painel da ONG
         </Link>
       )}
-      {user.role === "USER" && (
+      {user.role === "ADMIN" && (
         <>
           <Link href="/cart" className="block px-3 py-2 text-muted-foreground hover:text-primary">
             Carrinho

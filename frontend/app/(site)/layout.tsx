@@ -13,7 +13,7 @@ export default function RootLayout({
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navbar />
 
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 mt-16">{children}</main>
 
     </div>
   );

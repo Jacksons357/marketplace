@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronDown, LogOut, LayoutDashboard, ShoppingCart, ListCheck, Building, UserPlus } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  LogOut,
+  LayoutDashboard,
+  ShoppingCart,
+  ListCheck,
+  Building,
+  UserPlus,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -12,16 +22,17 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useSession, signOut } from "next-auth/react";
+import { Skeleton } from "./ui/skeleton";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const user = session?.user;
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <nav className="bg-white border-b border-border">
+    <nav className="bg-white border-b border-border fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -31,7 +42,7 @@ export function Navbar() {
 
           {/* Links Desktop */}
           <div className="hidden md:block">
-            <NavbarLinks user={user} />
+            <NavbarLinks user={user} status={status} />
           </div>
 
           {/* Mobile Toggle */}
@@ -54,7 +65,23 @@ export function Navbar() {
 
 /* ------------------- Subcomponents ------------------- */
 
-function NavbarLinks({ user }: { user?: any }) {
+function NavbarLinks({
+  user,
+  status,
+}: {
+  user?: any;
+  status: "authenticated" | "unauthenticated" | "loading";
+}) {
+  if (status === "loading") {
+    // Skeleton enquanto carrega sessão
+    return (
+      <div className="ml-10 flex items-center space-x-4">
+        <Skeleton className="h-8 w-24 rounded-md" />
+        <Skeleton className="h-8 w-20 rounded-md" />
+      </div>
+    );
+  }
+
   if (!user) {
     // Visitante
     return (
@@ -120,6 +147,20 @@ function NavbarDropdown() {
 }
 
 function UserMenu({ user }: { user: any }) {
+  if (!user) {
+    // Mostra skeleton no dropdown enquanto carrega
+    return (
+      <Button
+        variant="outline"
+        disabled
+        className="flex items-center gap-2 min-w-[120px] justify-between"
+      >
+        <Skeleton className="h-5 w-20" />
+        <ChevronDown className="w-4 h-4 opacity-50" />
+      </Button>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -162,15 +203,22 @@ function NavbarMobileMenu({ user }: { user?: any }) {
   if (!user) {
     return (
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 md:hidden">
-        <Link href="/auth/admin/register" className="block px-3 py-2 text-muted-foreground hover:text-primary">
-          <Building className="mr-2 h-4 w-4" />
-          Criar Organização
+        <Link
+          href="/auth/admin/register"
+          className="block px-3 py-2 text-muted-foreground hover:text-primary"
+        >
+          <Building className="mr-2 h-4 w-4 inline" /> Criar Organização
         </Link>
-        <Link href="/auth/user/register" className="block px-3 py-2 text-muted-foreground hover:text-primary">
-          <UserPlus className="mr-2 h-4 w-4" />
-          Criar Usuário
+        <Link
+          href="/auth/user/register"
+          className="block px-3 py-2 text-muted-foreground hover:text-primary"
+        >
+          <UserPlus className="mr-2 h-4 w-4 inline" /> Criar Usuário
         </Link>
-        <Link href="/auth/login" className="block px-3 py-2 bg-primary text-primary-foreground rounded-md">
+        <Link
+          href="/auth/login"
+          className="block px-3 py-2 bg-primary text-primary-foreground rounded-md"
+        >
           Login
         </Link>
       </div>

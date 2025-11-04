@@ -25,7 +25,7 @@ import { useSession, signOut } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
 import { useCart } from "@/contexts/cart-context";
 
-export function Navbar() {
+export function Navbar({ isDashboard }: { isDashboard?: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, status } = useSession();
   const user = session?.user;
@@ -33,20 +33,17 @@ export function Navbar() {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <nav className="bg-white border-b border-border fixed top-0 left-0 right-0 z-50">
+    <nav className={`bg-white border-b border-border top-0 left-0 right-0 z-50 ${isDashboard ? 'block' : 'fixed'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link href="/" className="flex items-center">
             <span className="text-2xl font-bold text-primary">Marketplace</span>
           </Link>
 
-          {/* Links Desktop */}
           <div className="hidden md:block">
             <NavbarLinks user={user} status={status} />
           </div>
 
-          {/* Mobile Toggle */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
@@ -58,7 +55,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && <NavbarMobileMenu user={user} />}
     </nav>
   );
@@ -121,7 +117,7 @@ function NavbarLinks({
 
       {user && user.role === "ADMIN" && (
         <Button variant="outline" asChild className="bg-transparent hover:bg-zinc-100/20">
-          <Link href="/dashboard/admin">Painel da ONG</Link>
+          <Link href="/dashboard">Painel da ONG</Link>
         </Button>
       )}
 
@@ -181,7 +177,7 @@ function UserMenu({ user }: { user: any }) {
       <DropdownMenuContent align="end">
         {user.role === "ADMIN" && (
           <DropdownMenuItem asChild>
-            <Link href="/dashboard/admin">
+            <Link href="/dashboard">
               <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
             </Link>
           </DropdownMenuItem>
@@ -226,7 +222,7 @@ function NavbarMobileMenu({ user }: { user?: any }) {
           <UserPlus className="mr-2 h-4 w-4 inline" /> Criar Usuário
         </Link>
         <Link
-          href="/auth/login"
+          href="/auth/user/login"
           className="block px-3 py-2 bg-primary text-primary-foreground rounded-md"
         >
           Login
@@ -238,7 +234,7 @@ function NavbarMobileMenu({ user }: { user?: any }) {
   return (
     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 md:hidden">
       {user.role === "ADMIN" && (
-        <Link href="/dashboard/admin" className="block px-3 py-2 text-primary font-medium">
+        <Link href="/dashboard" className="block px-3 py-2 text-primary font-medium">
           Painel da ONG
         </Link>
       )}

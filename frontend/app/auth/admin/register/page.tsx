@@ -1,7 +1,7 @@
 'use client'
 import { z } from 'zod'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -32,12 +32,6 @@ export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [generalError, setGeneralError] = useState('')
-  const { data: session } = useSession()
-  const isAuthenticated = !!session
-  if (isAuthenticated) {
-    router.push('/')
-    return null
-  }
 
   const {
     register,

@@ -1,4 +1,4 @@
-import { getAiSearch, getCategories, getProducts } from '@/http/product'
+import { getAiSearch, getCategories, getProducts, getProductsByUserId } from '@/http/product'
 import { GetProductsParams } from '@/types/product'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
@@ -31,5 +31,14 @@ export function useGetAiSearch(search: string) {
     queryFn: () => getAiSearch(search),
     enabled: !!search,
     staleTime: 1000 * 60 * 2
+  })
+}
+
+export function useGetProductsByUserId(token: string) {
+  return useQuery({
+    queryKey: ['products-by-user-id', token],
+    queryFn: () => getProductsByUserId(token),
+    enabled: !!token,
+    staleTime: 1000 * 60 * 2,
   })
 }

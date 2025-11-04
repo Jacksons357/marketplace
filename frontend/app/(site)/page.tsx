@@ -19,7 +19,7 @@ export default function Home() {
       <Banner />
       
       <div className="container mx-auto space-y-8 px-4 mt-8">
-        <CategoryLinks />
+        <CategoryLinks onCategorySelect={(category) => setFilters({ category })} />
         
         <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
           <FilterNav onFilterChange={setFilters} />

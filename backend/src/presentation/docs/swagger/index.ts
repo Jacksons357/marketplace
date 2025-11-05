@@ -1,5 +1,6 @@
 export * from './auth/adminSchemaDocs'
 export * from './auth/userSchemaDocs'
 export * from './admin/productSchemaDocs'
+export * from './admin/orderSchemaDocs'
 export * from './order/orderSchemaDocs'
 export * from './log/logSchemaDocs'

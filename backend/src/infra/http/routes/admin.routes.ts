@@ -9,6 +9,7 @@ import { makeProductAdminUpdateController } from "../../factories/make-product-a
 import { makeProductAdminDeleteController } from "../../factories/make-product-admin-delete";
 import { 
   headersSchemaDocs,
+  orderAdminListResponseSchemaDocs,
   productCreateBodySchemaDocs, 
   productCreateResponseSchemaDocs, 
   productListQuerySchemaDocs, 
@@ -16,6 +17,7 @@ import {
   productUpdateBodySchemaDocs,
   productUpdateResponseSchemaDocs,
 } from "../../../presentation/docs/swagger";
+import { makeOrderAdminListController } from "../../factories/make-order-admin-list";
 
 export function adminRoutes(app: FastifyInstance) {
   app.addHook('preHandler', authMiddleware)
@@ -25,6 +27,7 @@ export function adminRoutes(app: FastifyInstance) {
   const productAdminListController = makeProductAdminListController()
   const productAdminUpdateController = makeProductAdminUpdateController()
   const productAdminDeleteController = makeProductAdminDeleteController()
+  const orderAdminListController = makeOrderAdminListController()
 
   app.post('/products', {
     schema: {
@@ -77,4 +80,15 @@ export function adminRoutes(app: FastifyInstance) {
       security: [{ BearerAuth: []}],
     },
   },async (req: FastifyRequest, res: FastifyReply) => productAdminDeleteController.delete(req, res))
+
+  app.get('/orders', {
+    schema: {
+      tags: ['Admin'],
+      summary: 'List Orders by Organization',
+      description: 'List all orders the organization has registered.',
+      headers: headersSchemaDocs,
+      response: orderAdminListResponseSchemaDocs,
+      security: [{ BearerAuth: []}],
+    },
+  },async (req: FastifyRequest, res: FastifyReply) => orderAdminListController.list(req, res))
 }

@@ -37,3 +37,34 @@ export interface Order {
   items: OrderItem[];
   organizationName: string;
 }
+
+export interface OrderAdminListResponse {
+  totalOrders: number
+  totalItems: number
+  orders: OrderResponse[]
+}
+
+export interface OrderResponse {
+  id: string
+  totalPrice: number
+  status: string
+  createdAt: string
+  updatedAt: string
+  user: OrderUser | null
+  items: OrderItem[]
+}
+
+export interface OrderUser {
+  id: string
+  name: string
+  email: string
+  phone: string
+}
+
+export interface OrderItem {
+  id: string
+  productName: string
+  quantity: number
+  priceAtPurchase: number
+}
+

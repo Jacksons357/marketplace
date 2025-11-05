@@ -34,4 +34,12 @@ export class OrderRepository implements IOrderRepository {
     })
     return orders
   }
+
+  async listByOrganizationId(organizationId: string): Promise<Order[]> {
+    const orders = await prisma.order.findMany({
+      where: { organizationId },
+      include: { items: true }
+    })
+    return orders
+  }
 }

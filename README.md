@@ -239,3 +239,6 @@ docker-compose down
 docker-compose build --no-cache
 docker-compose up
 ```
+
+Copyright (c) 2025 Jackson Santos
+All rights reserved. Unauthorized copying, modification, or redistribution of this code is prohibited.
